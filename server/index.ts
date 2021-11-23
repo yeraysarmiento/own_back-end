@@ -18,7 +18,7 @@ app.use(express.json());
 const initializeServer = (port: number) =>
   new Promise((resolve) => {
     const server = app.listen(port, () => {
-      debug(chalk.green(`connecting to ${port}`));
+      debug(chalk.green(`Connected to port ${port}`));
       resolve(server);
     });
 
