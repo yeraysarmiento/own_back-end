@@ -1,16 +1,13 @@
 import express from "express";
 import log from "debug";
-import * as morgan from "morgan";
+import cors from "cors";
+import morgan from "morgan";
 import * as chalk from "chalk";
-import * as cors from "cors";
+import { generalErrorHandler, notFoundErrorHandler } from "./middlewares/error";
 
 const debug = log("own:server");
 
 const app = express();
-
-app.use(cors());
-app.use(morgan("dev"));
-app.use(express.json());
 
 const initializeServer = (port: number) =>
   new Promise((resolve) => {
@@ -32,5 +29,16 @@ const initializeServer = (port: number) =>
       debug(chalk.blue("See you soon"));
     });
   });
+
+app.use(morgan("dev"));
+app.use(cors());
+app.use(express.json());
+
+// app.use("/users");
+// app.use("/boards");
+// app.use("/posts");
+
+app.use(notFoundErrorHandler);
+app.use(generalErrorHandler);
 
 export default initializeServer;
