@@ -4,7 +4,7 @@ import log from "debug";
 
 const debug = log("own:database");
 
-const initializeDB = (connectionString) =>
+const initializeDB = (connectionString: string) =>
   new Promise<void>((resolve, reject) => {
     mongoose.set("toJSON", {
       virtuals: true,
