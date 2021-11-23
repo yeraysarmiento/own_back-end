@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { User } from "../../database/models/user";
-import { getUserData, OwnError } from "./usersControllers";
+import { getUserData, loginUser, OwnError } from "./usersControllers";
 
+jest.mock("bcrypt");
+jest.mock("jsonwebtoken");
 jest.mock("../../database/models/user");
 
 export const mockRequest = (id) => {
@@ -67,6 +71,84 @@ describe("Given a getUserData", () => {
       const next = jest.fn();
 
       await getUserData(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+    });
+  });
+});
+
+describe("Given an loginUser function", () => {
+  describe("When it receives a request with an correct username and password", () => {
+    test("Then it should invoke res.json with an object with a token", async () => {
+      const req = mockRequest(1);
+      req.body = {
+        username: "loling",
+        password: "loling",
+      };
+
+      const res = mockResponse();
+
+      const next = jest.fn();
+
+      User.findOne = jest.fn().mockResolvedValue({
+        username: "marito",
+        password: "marito",
+      });
+
+      bcrypt.compare = jest.fn().mockResolvedValue(true);
+      const token = "maritotoken";
+      jwt.sign = jest.fn().mockReturnValue(token);
+
+      const expectedResponse = {
+        user: token,
+      };
+
+      await loginUser(req, res, next);
+
+      expect(res.json).toHaveBeenCalledWith(expectedResponse);
+    });
+  });
+
+  describe("When it receives a request with an not valid username", () => {
+    test("Then it should invoke the next function with an error", async () => {
+      const username = "loling";
+      const req = mockRequest(1);
+      req.body = {
+        username,
+      };
+      const error: any = new Error("Wrong credentials");
+      error.code = 401;
+      const next = jest.fn();
+      const res = mockResponse();
+      User.findOne = jest.fn().mockResolvedValue(false);
+
+      await loginUser(req, res, next);
+
+      expect(User.findOne).toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+    });
+  });
+
+  describe("When it receives a request with a valid username and wrong password", () => {
+    test("Then it should invoke the next function with an error", async () => {
+      const req = mockRequest(1);
+      req.body = {
+        username: "loling",
+        password: "luling",
+      };
+      const res = mockResponse();
+      const next = jest.fn();
+      User.findOne = jest.fn().mockResolvedValue({
+        username: "marito",
+        password: "marito",
+      });
+      bcrypt.compare = jest.fn().mockResolvedValue(false);
+      const error = new OwnError("Wrong password");
+      error.code = 401;
+
+      await loginUser(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
