@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
     "lib": ["ES2016", "DOM"],
     "outDir": "./dist",
     "noEmitOnError": true,
-    "sourceMap": true,
+    "sourceMap": true
     // "rootDir": ".",
-    "esModuleInterop": true
   },
-  "include": ["./**/*.ts", ".eslintrc.js"],
+  "include": ["./**/*.ts", ".eslintrc.js", "babel.config.js"],
   "exclude": ["./dist", "node_modules"]
 }
