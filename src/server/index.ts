@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import chalk from "chalk";
 import { generalErrorHandler, notFoundErrorHandler } from "./middlewares/error";
+import usersRoutes from "./routes/usersRoutes";
 
 const debug = log("own:server");
 
@@ -34,7 +35,7 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
-// app.use("/users");
+app.use("/user", usersRoutes);
 // app.use("/boards");
 // app.use("/posts");
 
