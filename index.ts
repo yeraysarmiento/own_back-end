@@ -1,10 +1,9 @@
-/* eslint-disable import/first */
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import dotenv from "dotenv";
 
 import initializeDB from "./database";
 import initializeServer from "./server/index";
+
+dotenv.config();
 
 const port = process.env.PORT ?? process.env.OWN_PORT ?? 4500;
 
