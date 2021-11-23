@@ -2,6 +2,7 @@
 import * as dotenv from "dotenv";
 
 dotenv.config();
+
 import initializeDB from "./database";
 import initializeServer from "./server/index";
 
