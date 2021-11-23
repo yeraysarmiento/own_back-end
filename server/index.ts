@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import log from "debug";
 import * as morgan from "morgan";
 import * as chalk from "chalk";
