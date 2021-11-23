@@ -5,12 +5,13 @@ import { Request, Response } from "express";
 const debug = log("own:errors");
 // const { ValidationError } = require("express-validation");
 
-const notFoundErrorHandler = (req, res) => {
-  res.status(404).json({ error: "Endpoint not found" });
+export const notFoundErrorHandler = (req: Request, res: Response) => {
+  res.status(404);
+  res.json({ error: "Endpoint not found" });
 };
 
-const generalErrorHandler = (
-  error: { message: string; code: number },
+export const generalErrorHandler = (
+  error: { message?: string; code?: number },
   req: Request,
   res: Response
 ) => {
@@ -20,12 +21,14 @@ const generalErrorHandler = (
   // }
 
   debug(`An error has been thrown: ${error.message}`);
-  const message = error.code ? error.message : "Error: unable to specify";
+  const message: string = error.code
+    ? error.message
+    : "Error: unable to specify";
   res.status(error.code || 500);
   res.json({ error: message });
 };
 
-const notIdFoundHandler = (
+export const notIdFoundHandler = (
   req: Request,
   res: { json: (string) => void; status: number }
 ) => {
@@ -34,14 +37,7 @@ const notIdFoundHandler = (
   res.json({ error: "This ID has not been found" });
 };
 
-const notAllowedHandler = (req, res) => {
+export const notAllowedHandler = (req, res) => {
   debug(chalk.red(`A not allowed user tried to access to editing mode`));
   res.status(404).json({ error: "You are not allowed" });
-};
-
-export = {
-  notFoundErrorHandler,
-  generalErrorHandler,
-  notIdFoundHandler,
-  notAllowedHandler,
 };
