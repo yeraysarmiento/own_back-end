@@ -2,7 +2,12 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../../database/models/user";
-import { getUserData, loginUser, OwnError } from "./usersControllers";
+import {
+  getUserData,
+  loginUser,
+  OwnError,
+  registerUser,
+} from "./usersControllers";
 
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
@@ -149,6 +154,54 @@ describe("Given an loginUser function", () => {
       error.code = 401;
 
       await loginUser(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+    });
+  });
+});
+
+describe("Given an registerUser function", () => {
+  describe("When it receives a req object with a not existing username", () => {
+    test("Then it should respond with a 200 status", async () => {
+      const user = {
+        username: "loling",
+        password: "loling",
+        email: "lolingmail",
+      };
+      const newUser = {
+        ...user,
+        boards: [],
+        password: "encrypted",
+      };
+      const req = mockRequest(1);
+      req.body = user;
+
+      User.findOne = jest.fn().mockResolvedValue(null);
+      bcrypt.hash = jest.fn().mockResolvedValue(newUser.password);
+      User.create = jest.fn().mockResolvedValue(newUser);
+
+      const res = mockResponse();
+
+      await registerUser(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(newUser);
+    });
+  });
+  describe("When it receives a request with an existing username", () => {
+    test("Then it should invoke next function with an error", async () => {
+      const username = "loling";
+      const req = mockRequest(1);
+      req.body = {
+        username,
+      };
+      const error = new OwnError("Username already taken");
+      error.code = 400;
+      const next = jest.fn();
+      const res = mockResponse();
+      User.findOne = jest.fn().mockResolvedValue(true);
+
+      await registerUser(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
