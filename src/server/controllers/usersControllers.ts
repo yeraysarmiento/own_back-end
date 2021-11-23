@@ -28,6 +28,7 @@ const getUserData = async (req: Request, res: Response, next: NextFunction) => {
       res.json(searchedUser);
     } else {
       const error = new OwnError("User not found in our server");
+      error.code = 400;
       next(error);
     }
   } catch (error) {
@@ -110,4 +111,4 @@ const registerUser = async (
   }
 };
 
-export { loginUser, registerUser, getUserData };
+export { loginUser, registerUser, getUserData, OwnError };
