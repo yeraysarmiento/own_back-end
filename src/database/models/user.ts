@@ -6,6 +6,11 @@ interface UserInterface {
   password: string;
   boards: string[];
 }
+interface UserToRegister {
+  username: string;
+  email: string;
+  password: string;
+}
 
 const userSchema: Schema<UserInterface> = new Schema({
   username: {
@@ -29,4 +34,4 @@ const userSchema: Schema<UserInterface> = new Schema({
 
 const User = model("User", userSchema);
 
-export default User;
+export { User, UserInterface, UserToRegister };
