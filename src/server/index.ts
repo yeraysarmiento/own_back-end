@@ -2,7 +2,7 @@ import express from "express";
 import log from "debug";
 import cors from "cors";
 import morgan from "morgan";
-import * as chalk from "chalk";
+import chalk from "chalk";
 import { generalErrorHandler, notFoundErrorHandler } from "./middlewares/error";
 
 const debug = log("own:server");

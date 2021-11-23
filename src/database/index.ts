@@ -1,5 +1,5 @@
-import * as chalk from "chalk";
-import * as mongoose from "mongoose";
+import chalk from "chalk";
+import mongoose from "mongoose";
 import log from "debug";
 
 const debug = log("own:database");
