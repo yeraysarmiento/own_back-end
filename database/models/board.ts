@@ -13,7 +13,7 @@ interface BoardInterface {
   logo: string;
   category: string;
   social: SocialInterface;
-  posts: number[];
+  posts: string[];
 }
 
 const boardSchema: Schema<BoardInterface> = new Schema({
