@@ -1,11 +1,8 @@
-import * as dotenv from "dotenv";
 import * as express from "express";
 import log from "debug";
 import * as morgan from "morgan";
 import * as chalk from "chalk";
 import * as cors from "cors";
-
-dotenv.config();
 
 const debug = log("own:server");
 
