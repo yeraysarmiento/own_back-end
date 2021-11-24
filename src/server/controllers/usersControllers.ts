@@ -15,14 +15,19 @@ const debug = log("own:userscontroller");
 dotenv.config();
 
 class OwnError extends Error {
-  code: string | number;
+  code: number | undefined;
 }
 
-const getUserData = async (req: Request, res: Response, next: NextFunction) => {
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
   const { id: idUser } = req.params;
 
   try {
     const searchedUser: UserInterface = await User.findById(idUser);
+    // .populate([
+    //   {
+    //     path: "boards",
+    //   },
+    // ]);
     if (searchedUser) {
       res.status(200);
       res.json(searchedUser);
@@ -42,6 +47,7 @@ const getUserData = async (req: Request, res: Response, next: NextFunction) => {
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   debug(chalk.green("An user has logged in"));
   const { username, password } = req.body;
+
   const user = await User.findOne({ username });
 
   if (!user) {
@@ -111,4 +117,4 @@ const registerUser = async (
   }
 };
 
-export { loginUser, registerUser, getUserData, OwnError };
+export { loginUser, registerUser, getUser, OwnError };

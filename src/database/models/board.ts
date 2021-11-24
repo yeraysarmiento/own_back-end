@@ -49,6 +49,6 @@ const boardSchema: Schema<BoardInterface> = new Schema({
   },
 });
 
-const User = model("Board", boardSchema);
+const Board = model("Board", boardSchema);
 
-export default User;
+export default Board;

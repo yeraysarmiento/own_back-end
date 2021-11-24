@@ -1,5 +1,5 @@
 import log from "debug";
-import * as chalk from "chalk";
+// import chalk from "chalk";
 import { Request, Response } from "express";
 
 const debug = log("own:errors");
@@ -11,7 +11,10 @@ export const notFoundErrorHandler = (req: Request, res: Response) => {
 };
 
 export const generalErrorHandler = (
-  error: { message?: string; code?: number },
+  error: {
+    message?: string;
+    code?: number;
+  },
   req: Request,
   res: Response
 ) => {
@@ -26,18 +29,4 @@ export const generalErrorHandler = (
     : "Error: unable to specify";
   res.status(error.code || 500);
   res.json({ error: message });
-};
-
-export const notIdFoundHandler = (
-  req: Request,
-  res: { json: (string) => void; status: number }
-) => {
-  debug(chalk.red(`A nonexisting ID has been requested`));
-  res.status = 401;
-  res.json({ error: "This ID has not been found" });
-};
-
-export const notAllowedHandler = (req, res) => {
-  debug(chalk.red(`A not allowed user tried to access to editing mode`));
-  res.status(404).json({ error: "You are not allowed" });
 };
