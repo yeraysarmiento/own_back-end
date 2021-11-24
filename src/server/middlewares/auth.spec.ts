@@ -1,80 +1,59 @@
 import jwt from "jsonwebtoken";
 import auth from "./auth";
 import OwnError from "../utils/OwnError";
+import mockResponse from "../mocks/mockResponse";
+import mockRequestAuth from "../mocks/mockRequestAuth";
 
 jest.mock("jsonwebtoken");
 
 describe("Given an Auth middleware", () => {
   describe("When it gets a request without a token", () => {
-    test("Then it should send an error with a message 'A token is needed to access' and status 401", () => {
-      const req = {
-        header: jest.fn(),
-      };
-
-      const res = {};
-
+    test("Then it should send an error with a message 'A token is needed to access'", () => {
+      const req = mockRequestAuth(null, null);
       const next = jest.fn();
+      const error = new OwnError("A token is needed to access");
+      auth(req, null, next);
 
-      const expectedError = new NewError("Not authorized sorry");
-
-      auth(req, res, next);
-      expect(next).toBeCalledWith(expectedError);
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
-  // describe("When it gets a request with a Authorization header but without a token", () => {
-  //   test("Then it should send an error with a message 'Token is missing' and status 401", () => {
-  //     const authHeader = "nunu";
 
-  //     const req = {
-  //       header: jest.fn().mockReturnValue(authHeader),
-  //     };
+  describe("When it gets a request with a valid Header but a not registered token", () => {
+    test("Then it should send an error with a message 'A valid token is needed to access'", () => {
+      const req = mockRequestAuth(null, "Bearer ");
+      const next = jest.fn();
+      const error = new OwnError("A valid token is needed to access");
+      auth(req, null, next);
 
-  //     const res = {};
-  //     const next = jest.fn();
-  //     const expectedError = new NewError("Token is missing...");
+      expect(next).toHaveBeenCalledWith(error);
+    });
 
-  //     auth(req, res, next);
+    describe("When it gets a request with a Authorization header and it validates", () => {
+      test("Then it should add a property userId to the request and call next", async () => {
+        const req = mockRequestAuth(null, "Bearer token");
+        const next = jest.fn();
 
-  //     expect(next).toHaveBeenCalledWith(expectedError);
-  //   });
-  // });
-  // describe("When it gets a request with a Authorization header and it validates", () => {
-  //   test("Then it should add userId and userName to req and call next", async () => {
-  //     const req = {
-  //       json: jest.fn(),
-  //       header: jest.fn().mockReturnValue("Bearer token"),
-  //     };
+        jwt.verify = jest.fn().mockReturnValue("tokensito");
+        await auth(req, null, next);
 
-  //     const next = jest.fn();
+        expect(req).toHaveProperty("userId");
+        expect(next).toHaveBeenCalled();
+      });
+    });
 
-  //     const res = {};
+    describe("When it gets a request with a Authorization header but with an incorrect token", () => {
+      test("Then it should send an error with a message 'Token no valid' and status 401", async () => {
+        const req = mockRequestAuth(null, "Bearer token");
+        const res = mockResponse();
+        const next = jest.fn();
+        jwt.verify = jest.fn().mockRejectedValue(null);
 
-  //     jwt.verify = jest.fn().mockReturnValue("algo");
-  //     await auth(req, res, next);
+        const error = new OwnError("A not valid token has been introduced");
 
-  //     expect(req).toHaveProperty("userId");
-  //     expect(req).toHaveProperty("userName");
-  //     expect(next).toHaveBeenCalled();
-  //   });
-  // });
+        await auth(req, res, next);
 
-  // describe("When it gets a request with a Authorization header but with an incorrect token", () => {
-  //   test("Then it should send an error with a message 'Token no valid' and status 401", async () => {
-  //     const req = {
-  //       json: jest.fn(),
-  //       header: jest.fn().mockReturnValue("Bearer token"),
-  //     };
-
-  //     const next = jest.fn();
-  //     const errorSent = new NewError("Token not valid");
-  //     errorSent.code = 401;
-
-  //     const res = {};
-
-  //     jwt.verify = jest.fn().mockReturnValue(null);
-  //     await auth(req, res, next);
-
-  //     expect(next).toHaveBeenCalledWith(errorSent);
-  //   });
-  // });
+        expect(next).toHaveBeenCalledWith(error);
+      });
+    });
+  });
 });
