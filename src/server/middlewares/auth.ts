@@ -24,6 +24,7 @@ const auth = async (req: RequestAuth, res: Response, next: NextFunction) => {
       try {
         const user = await jwt.verify(token, process.env.SECRET);
         req.userId = user.id;
+        req.username = user.username;
         next();
       } catch {
         const error = new OwnError("A not valid token has been introduced");

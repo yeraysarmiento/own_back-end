@@ -11,13 +11,17 @@ import {
 } from "../../database/models/user";
 import RequestAuth from "../utils/RequestAuth";
 import OwnError from "../utils/OwnError";
-import Board from "../../database/models/board";
+import { Board } from "../../database/models/board";
 
 const debug = log("own:userscontroller");
 
 dotenv.config();
 
-export const getUserBoards = async (req, res, next) => {
+export const getBoardsUser = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     Board.find();
     res.json();

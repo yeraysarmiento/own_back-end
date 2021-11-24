@@ -51,4 +51,4 @@ const boardSchema: Schema<BoardInterface> = new Schema({
 
 const Board = model("Board", boardSchema);
 
-export default Board;
+export { Board, BoardInterface };
