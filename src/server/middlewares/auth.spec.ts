@@ -46,7 +46,7 @@ describe("Given an Auth middleware", () => {
         const req = mockRequestAuth(null, "Bearer token");
         const res = mockResponse();
         const next = jest.fn();
-        jwt.verify = jest.fn().mockRejectedValue(null);
+        jwt.verify = jest.fn().mockReturnValue(null);
 
         const error = new OwnError("A not valid token has been introduced");
 

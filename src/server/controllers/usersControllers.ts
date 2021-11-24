@@ -11,21 +11,28 @@ import {
 } from "../../database/models/user";
 import RequestAuth from "../utils/RequestAuth";
 import OwnError from "../utils/OwnError";
+import Board from "../../database/models/board";
 
 const debug = log("own:userscontroller");
 
 dotenv.config();
 
+export const getUserBoards = async (req, res, next) => {
+  try {
+    Board.find();
+    res.json();
+  } catch (error) {
+    error.code = 400;
+    error.message = "Boards not available";
+    next(error);
+  }
+};
+
 const getUser = async (req: RequestAuth, res: Response, next: NextFunction) => {
   const { id: idUser } = req.params;
 
   try {
-    const searchedUser: UserInterface = await User.findById(idUser);
-    // .populate([
-    //   {
-    //     path: "boards",
-    //   },
-    // ]);
+    const searchedUser = await User.findById(idUser).populate("boards");
 
     if (searchedUser) {
       res.status(200);
