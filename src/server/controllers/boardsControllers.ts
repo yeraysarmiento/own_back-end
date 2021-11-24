@@ -16,8 +16,13 @@ const createBoard = async (
   res: Response,
   next: NextFunction
 ) => {
+  const image = req.file;
   try {
-    const newBoard = await Board.create({ ...req.body, posts: [] });
+    const newBoard = await Board.create({
+      ...req.body,
+      logo: image.fileURL,
+      posts: [],
+    });
     await User.findOneAndUpdate(
       { _id: req.userId },
       { $push: { boards: newBoard.id } }
