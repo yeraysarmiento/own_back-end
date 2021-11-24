@@ -1,5 +1,5 @@
 const boardsPath = {
-  createBoard: "/new/:id",
+  createBoard: "/new",
   deleteBoard: "/delete/:id",
   modifyBoard: "/update/:id",
 };
