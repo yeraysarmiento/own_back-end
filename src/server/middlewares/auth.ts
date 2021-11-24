@@ -28,7 +28,6 @@ const auth = async (req: RequestAuth, res: Response, next: NextFunction) => {
         next();
       } catch {
         const error = new OwnError("A not valid token has been introduced");
-        // error.message = "A not valid token has been introduced";
         error.code = 401;
         next(error);
       }
