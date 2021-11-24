@@ -31,9 +31,30 @@ const createBoard = async (
   }
 };
 
-// const deleteBoard = async (req: Request, res: Response, next: NextFunction) => {
-//   const { id: boardId } = req.params;
-//   const boardDeleted = await Board.findByIdAndDelete(boardId);
-// };
+const deleteBoard = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id: boardId } = req.params;
+    const boardDeleted = await Board.findByIdAndDelete(boardId);
+    if (!boardDeleted) {
+      const error = new OwnError("This board does not exist in our database");
+      error.code = 401;
+      next(error);
+    } else {
+      await User.findByIdAndUpdate(
+        { _id: req.userId },
+        { $pull: { boards: boardId } }
+      );
+      res.json(boardDeleted);
+    }
+  } catch {
+    const error = new OwnError("It was not possible to delete the board");
+    error.code = 400;
+    next(error);
+  }
+};
 
-export default createBoard;
+export { createBoard, deleteBoard };
