@@ -5,6 +5,7 @@ import morgan from "morgan";
 import chalk from "chalk";
 import { generalErrorHandler, notFoundErrorHandler } from "./middlewares/error";
 import usersRoutes from "./routes/usersRoutes";
+import Board from "../database/models/board";
 
 const debug = log("own:server");
 
@@ -15,6 +16,19 @@ const initializeServer = (port: number) =>
     const server = app.listen(port, () => {
       debug(chalk.green(`Connected to port ${port}`));
       resolve(server);
+      // Board.create({
+      //   name: "Amallective",
+      //   about: "Little architecture web",
+      //   email: "info@amallective.com",
+      //   logo: "url",
+      //   category: "Architecture",
+      //   social: {
+      //     instagram: "instagramaccount",
+      //     facebook: "facebookaccount",
+      //     twitter: "twitteraccount",
+      //   },
+      //   posts: [],
+      // });
     });
 
     server.on("error", (error: { code: string }) => {

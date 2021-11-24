@@ -2,12 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../../database/models/user";
-import {
-  getUserData,
-  loginUser,
-  OwnError,
-  registerUser,
-} from "./usersControllers";
+import { getUser, loginUser, OwnError, registerUser } from "./usersControllers";
 
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
@@ -26,7 +21,7 @@ export const mockResponse = () => {
   return res;
 };
 
-describe("Given a getUserData", () => {
+describe("Given a getUser", () => {
   describe("When it receives a req object with a valid id on its params", () => {
     test("Then it should invoke the method json with the user searched", async () => {
       const user = {
@@ -41,7 +36,7 @@ describe("Given a getUserData", () => {
       const res = mockResponse();
 
       User.findById = jest.fn().mockResolvedValue(user);
-      await getUserData(req, res, null);
+      await getUser(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(user);
       expect(res.status).toHaveBeenCalledWith(200);
@@ -57,7 +52,7 @@ describe("Given a getUserData", () => {
       const res = mockResponse();
       const next = jest.fn();
 
-      await getUserData(req, res, next);
+      await getUser(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
@@ -75,7 +70,7 @@ describe("Given a getUserData", () => {
       const res = mockResponse();
       const next = jest.fn();
 
-      await getUserData(req, res, next);
+      await getUser(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
