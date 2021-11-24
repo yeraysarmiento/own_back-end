@@ -23,7 +23,10 @@ describe("Given a getUser", () => {
       const req = mockRequest(user.id);
       const res = mockResponse();
 
-      User.findById = jest.fn().mockResolvedValue(user);
+      User.findById = jest
+        .fn()
+        .mockReturnValue({ populate: jest.fn().mockResolvedValue(user) });
+
       await getUser(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(user);
@@ -35,7 +38,9 @@ describe("Given a getUser", () => {
       const requestedId = 1;
       const error = new OwnError("User not found in our server");
       error.code = 400;
-      User.findById = jest.fn().mockResolvedValue(null);
+      User.findById = jest
+        .fn()
+        .mockReturnValue({ populate: jest.fn().mockResolvedValue(null) });
       const req = mockRequest(requestedId);
       const res = mockResponse();
       const next = jest.fn();
@@ -52,8 +57,9 @@ describe("Given a getUser", () => {
         message: "User not possible to find",
         code: 401,
       };
-
-      User.findById = jest.fn().mockRejectedValue(error);
+      User.findById = jest
+        .fn()
+        .mockReturnValue({ populate: jest.fn().mockRejectedValue(error) });
       const req = mockRequest(1);
       const res = mockResponse();
       const next = jest.fn();
