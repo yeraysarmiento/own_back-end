@@ -40,7 +40,7 @@ describe("Given a generalErrorHandler", () => {
       const error = { message: "hola" };
       const res = mockResponse();
 
-      await generalErrorHandler(error, null, res);
+      await generalErrorHandler(error, null, res, null);
 
       expect(res.status).toHaveBeenCalledWith(500);
     });
@@ -48,7 +48,7 @@ describe("Given a generalErrorHandler", () => {
       const error = { code: 418, message: "Little error" };
       const res = mockResponse();
 
-      await generalErrorHandler(error, null, res);
+      await generalErrorHandler(error, null, res, null);
 
       expect(res.json).toHaveBeenCalledWith({ error: "Little error" });
     });
@@ -58,7 +58,7 @@ describe("Given a generalErrorHandler", () => {
       const error = { code: 418, message: "Hola" };
       const res = mockResponse();
 
-      await generalErrorHandler(error, null, res);
+      await generalErrorHandler(error, null, res, null);
 
       expect(res.status).toHaveBeenCalledWith(418);
     });
@@ -66,7 +66,7 @@ describe("Given a generalErrorHandler", () => {
       const error = { code: 418, message: "Little error" };
       const res = mockResponse();
 
-      await generalErrorHandler(error, null, res);
+      await generalErrorHandler(error, null, res, null);
 
       expect(res.json).toHaveBeenCalledWith({ error: "Little error" });
     });

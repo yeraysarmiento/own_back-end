@@ -28,6 +28,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
     //     path: "boards",
     //   },
     // ]);
+
     if (searchedUser) {
       res.status(200);
       res.json(searchedUser);
@@ -39,7 +40,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     error.message = "User not possible to find";
     error.code = 401;
-    res.status(401);
+
     next(error);
   }
 };
@@ -117,4 +118,4 @@ const registerUser = async (
   }
 };
 
-export { loginUser, registerUser, getUser, OwnError };
+export { OwnError, getUser, loginUser, registerUser };
