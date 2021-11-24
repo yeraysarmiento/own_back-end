@@ -5,7 +5,6 @@ import morgan from "morgan";
 import chalk from "chalk";
 import { generalErrorHandler, notFoundErrorHandler } from "./middlewares/error";
 import usersRoutes from "./routes/usersRoutes";
-import Board from "../database/models/board";
 
 const debug = log("own:server");
 
