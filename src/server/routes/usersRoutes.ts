@@ -6,10 +6,11 @@ import {
   getUser,
   registerUser,
 } from "../controllers/usersControllers";
+import auth from "../middlewares/auth";
 
 const router = express.Router();
 
-router.get(usersPath.getUser, getUser);
+router.get(usersPath.getUser, auth, getUser);
 router.post(usersPath.loginUser, loginUser);
 router.post(usersPath.registerUser, registerUser);
 

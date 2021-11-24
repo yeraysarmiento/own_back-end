@@ -9,16 +9,14 @@ import {
   UserInterface,
   UserToRegister,
 } from "../../database/models/user";
+import RequestAuth from "../utils/RequestAuth";
+import OwnError from "../utils/OwnError";
 
 const debug = log("own:userscontroller");
 
 dotenv.config();
 
-class OwnError extends Error {
-  code: number | undefined;
-}
-
-const getUser = async (req: Request, res: Response, next: NextFunction) => {
+const getUser = async (req: RequestAuth, res: Response, next: NextFunction) => {
   const { id: idUser } = req.params;
 
   try {

@@ -1,25 +1,13 @@
-import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../../database/models/user";
 import { getUser, loginUser, OwnError, registerUser } from "./usersControllers";
+import mockRequest from "../mocks/mockRequest";
+import mockResponse from "../mocks/mockResponse";
 
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
 jest.mock("../../database/models/user");
-
-export const mockRequest = (id) => {
-  const req = {} as Request;
-  req.params = id;
-  return req;
-};
-
-export const mockResponse = () => {
-  const res = {} as Response;
-  res.status = jest.fn().mockReturnThis();
-  res.json = jest.fn().mockReturnThis();
-  return res;
-};
 
 describe("Given a getUser", () => {
   describe("When it receives a req object with a valid id on its params", () => {
