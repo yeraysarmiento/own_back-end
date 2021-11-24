@@ -34,7 +34,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
       res.json(searchedUser);
     } else {
       const error = new OwnError("User not found in our server");
-      // error.code = 400;
+      error.code = 400;
       next(error);
     }
   } catch (error) {
