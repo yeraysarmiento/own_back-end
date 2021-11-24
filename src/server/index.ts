@@ -39,7 +39,6 @@ app.use(express.json());
 
 app.use("/user", usersRoutes);
 app.use("/boards", auth, boardsRoutes);
-// app.use("/posts");
 
 app.use("*", notFoundErrorHandler);
 app.use(generalErrorHandler);
