@@ -8,6 +8,7 @@
     "compile": "tsc --watch",
     "start": "node dist/index.js",
     "dev": "nodemon dist/index.js -q",
+    "debug": "nodemon --inspect-brk dist/index.js -q",
     "build": "tsc",
     "lint": "eslint .",
     "test": "jest",

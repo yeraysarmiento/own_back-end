@@ -52,7 +52,7 @@ app.use("/user", usersRoutes);
 // app.use("/boards");
 // app.use("/posts");
 
-app.use(notFoundErrorHandler);
+app.use("*", notFoundErrorHandler);
 app.use(generalErrorHandler);
 
 export default initializeServer;
