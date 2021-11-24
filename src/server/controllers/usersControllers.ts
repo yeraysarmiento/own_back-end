@@ -9,6 +9,7 @@ import {
   UserInterface,
   UserToRegister,
 } from "../../database/models/user";
+import RequestAuth from "../utils/RequestAuth";
 
 const debug = log("own:userscontroller");
 
@@ -18,7 +19,7 @@ class OwnError extends Error {
   code: number | undefined;
 }
 
-const getUser = async (req: Request, res: Response, next: NextFunction) => {
+const getUser = async (req: RequestAuth, res: Response, next: NextFunction) => {
   const { id: idUser } = req.params;
 
   try {
