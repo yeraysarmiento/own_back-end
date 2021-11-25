@@ -28,6 +28,7 @@ router.patch(
   uploadLogo.single("logo"),
   firebase,
   validate(boardSchema),
+  authentication,
   updateBoard
 );
 
