@@ -1,4 +1,4 @@
-import Joi from "Joi";
+import Joi from "joi";
 
 const registerSchema = {
   body: Joi.object({
