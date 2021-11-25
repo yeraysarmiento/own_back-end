@@ -9,6 +9,7 @@ import firebase from "../middlewares/firebase";
 import boardsPath from "../paths/boardsPath";
 import uploadLogo from "../middlewares/uploadLogo";
 import boardSchema from "../schemas/boardSchema";
+import authentication from "../middlewares/authentication";
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.post(
   createBoard
 );
 
-router.delete(boardsPath.deleteBoard, deleteBoard);
+router.delete(boardsPath.deleteBoard, authentication, deleteBoard);
 
 router.patch(
   boardsPath.updateBoard,
