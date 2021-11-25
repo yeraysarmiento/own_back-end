@@ -1,7 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../../database/models/user";
-import { getUser, loginUser, OwnError, registerUser } from "./usersController";
+import {
+  getProfile,
+  loginUser,
+  OwnError,
+  registerUser,
+} from "./usersController";
 import mockRequest from "../mocks/mockRequest";
 import mockResponse from "../mocks/mockResponse";
 
@@ -9,7 +14,7 @@ jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
 jest.mock("../../database/models/user");
 
-describe("Given a getUser", () => {
+describe("Given a getProfile", () => {
   describe("When it receives a req object with a valid id on its params", () => {
     test("Then it should invoke the method json with the user searched", async () => {
       const user = {
@@ -27,7 +32,7 @@ describe("Given a getUser", () => {
         .fn()
         .mockReturnValue({ populate: jest.fn().mockResolvedValue(user) });
 
-      await getUser(req, res, null);
+      await getProfile(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(user);
       expect(res.status).toHaveBeenCalledWith(200);
@@ -45,7 +50,7 @@ describe("Given a getUser", () => {
       const res = mockResponse();
       const next = jest.fn();
 
-      await getUser(req, res, next);
+      await getProfile(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
@@ -64,7 +69,7 @@ describe("Given a getUser", () => {
       const res = mockResponse();
       const next = jest.fn();
 
-      await getUser(req, res, next);
+      await getProfile(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
