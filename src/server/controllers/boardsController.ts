@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { NextFunction, Response } from "express";
 import dotenv from "dotenv";
 import log from "debug";
@@ -44,17 +45,26 @@ const deleteBoard = async (
 ) => {
   try {
     const { id: boardId } = req.params;
-    const boardDeleted = await Board.findByIdAndDelete(boardId);
-    if (!boardDeleted) {
-      const error = new OwnError("This board does not exist in our database");
-      error.code = 401;
-      next(error);
+
+    const user = await User.findOne({ id: req.userId });
+
+    if (user.boards.includes(boardId)) {
+      const boardDeleted = await Board.findByIdAndDelete(boardId);
+      if (!boardDeleted) {
+        const error = new OwnError("This board does not exist in our database");
+        error.code = 401;
+        next(error);
+      } else {
+        await User.findByIdAndUpdate(
+          { _id: req.userId },
+          { $pull: { boards: boardId } }
+        );
+        res.json(boardDeleted);
+      }
     } else {
-      await User.findByIdAndUpdate(
-        { _id: req.userId },
-        { $pull: { boards: boardId } }
-      );
-      res.json(boardDeleted);
+      const error = new OwnError("You are not allowed to delete that board");
+      error.code = 400;
+      next(error);
     }
   } catch {
     const error = new OwnError("It was not possible to delete the board");
