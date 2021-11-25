@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { NextFunction, Response } from "express";
 import dotenv from "dotenv";
 import log from "debug";
@@ -44,6 +45,7 @@ const deleteBoard = async (
 ) => {
   try {
     const { id: boardId } = req.params;
+
     const boardDeleted = await Board.findByIdAndDelete(boardId);
     if (!boardDeleted) {
       const error = new OwnError("This board does not exist in our database");
