@@ -1,9 +1,9 @@
 import log from "debug";
 import chalk from "chalk";
 import { Request, Response } from "express";
+import { ValidationError } from "express-validation";
 
 const debug = log("own:errors");
-// const { ValidationError } = require("express-validation");
 
 const notFoundErrorHandler = (req: Request, res: Response) => {
   res.status(404);
@@ -20,15 +20,13 @@ const generalErrorHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: any
 ) => {
-  // if (error instanceof ValidationError) {
-  //   error.code = 400;
-  //   error.message = "Anonymous error in your schema";
-  // }
+  if (error instanceof ValidationError) {
+    debug(chalk.red("A not valid format request has been sent"));
+    error.message = "Not valid request";
+  }
 
   debug(chalk.red(`An error has been thrown: ${error.message}`));
-  const message: string = error.code
-    ? error.message
-    : "Error: unable to specify";
+  const message = error.message || "Error: unable to specify";
   res.status(error.code || 500);
   res.json({ error: message });
 };
