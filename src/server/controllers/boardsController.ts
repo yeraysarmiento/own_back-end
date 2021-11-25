@@ -72,6 +72,12 @@ const updateBoard = async (
 ) => {
   const { id: boardId } = req.params;
   const board = req.body;
+  const { file } = req;
+
+  if (file) {
+    req.body.logo = file.fileURL;
+  }
+
   try {
     const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
       new: true,
