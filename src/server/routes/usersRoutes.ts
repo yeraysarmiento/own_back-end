@@ -3,7 +3,7 @@ import { validate } from "express-validation";
 import usersPath from "../paths/usersPath";
 import {
   loginUser,
-  getUser,
+  getProfile,
   registerUser,
 } from "../controllers/usersController";
 import auth from "../middlewares/auth";
@@ -12,7 +12,7 @@ import registerSchema from "../schemas/registerSchema";
 
 const router = express.Router();
 
-router.get(usersPath.getUser, auth, getUser);
+router.get(usersPath.getUser, auth, getProfile);
 router.post(usersPath.loginUser, validate(loginSchema), loginUser);
 router.post(usersPath.registerUser, validate(registerSchema), registerUser);
 

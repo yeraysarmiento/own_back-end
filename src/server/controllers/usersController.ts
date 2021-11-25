@@ -32,7 +32,11 @@ export const getBoardsUser = async (
   }
 };
 
-const getUser = async (req: RequestAuth, res: Response, next: NextFunction) => {
+const getProfile = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
   const { id: idUser } = req.params;
 
   try {
@@ -127,4 +131,4 @@ const registerUser = async (
   }
 };
 
-export { OwnError, getUser, loginUser, registerUser };
+export { OwnError, getProfile, loginUser, registerUser };
