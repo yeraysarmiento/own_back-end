@@ -5,7 +5,7 @@ import {
   loginUser,
   getUser,
   registerUser,
-} from "../controllers/usersControllers";
+} from "../controllers/usersController";
 import auth from "../middlewares/auth";
 import loginSchema from "../schemas/loginSchema";
 import registerSchema from "../schemas/registerSchema";

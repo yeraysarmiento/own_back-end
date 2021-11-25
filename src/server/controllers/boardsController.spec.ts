@@ -2,8 +2,8 @@ import { Board } from "../../database/models/board";
 import { User } from "../../database/models/user";
 import mockRequestAuth from "../mocks/mockRequestAuth";
 import mockResponse from "../mocks/mockResponse";
-import { createBoard, deleteBoard } from "./boardsControllers";
-import { OwnError } from "./usersControllers";
+import { createBoard, deleteBoard, updateBoard } from "./boardsController";
+import { OwnError } from "./usersController";
 
 jest.mock("../../database/models/board");
 jest.mock("../../database/models/user");
@@ -106,6 +106,85 @@ describe("Given a deleteBoard function", () => {
 
       await deleteBoard(req, res, next);
 
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a createBoard function", () => {
+  describe("When it receives a req object with a board to update and a valid id", () => {
+    test("Then it should invoke method json with the board already updated", async () => {
+      const updatedBoard = {
+        id: 1,
+        name: "string",
+        about: "string",
+        email: "string",
+        logo: "string",
+        category: "string",
+        social: {
+          instagram: "string",
+          twitter: "string",
+          facebook: "string",
+        },
+        posts: [],
+      };
+      Board.findByIdAndUpdate = jest.fn().mockResolvedValue(updatedBoard);
+      const req = mockRequestAuth(null, null, { id: updatedBoard.id });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updateBoard(req, res, next);
+      expect(res.json).toHaveBeenCalledWith(updatedBoard);
+    });
+  });
+  describe("When it receives a req object with a board to update and a not valid id", () => {
+    test("Then it should invoke next with an error and a message 'It was not possible to find the board'", async () => {
+      const updatedBoard = {
+        id: 1,
+        name: "string",
+        about: "string",
+        email: "string",
+        logo: "string",
+        category: "string",
+        social: {
+          instagram: "string",
+          twitter: "string",
+          facebook: "string",
+        },
+        posts: [],
+      };
+      const error = new OwnError("It was not possible to find the board");
+      Board.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
+      const req = mockRequestAuth(null, null, { id: updatedBoard.id });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updateBoard(req, res, next);
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe("When it receives a req object with a board to update and a not valid id", () => {
+    test("Then it should invoke next with an error and a message 'It was not possible to find the board'", async () => {
+      const error = new OwnError("It was not possible to find the board");
+      Board.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
+      const req = mockRequestAuth(null, null, { id: 1 });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updateBoard(req, res, next);
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+  describe("When it receives a req object with a board to update but the petition fails", () => {
+    test("Then it should invoke next with an error and a message 'It was not possible to modify the board'", async () => {
+      const error = new OwnError("It was not possible to modify the board");
+      Board.findByIdAndUpdate = jest.fn().mockRejectedValue({});
+      const req = mockRequestAuth(null, null, { id: 1 });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updateBoard(req, res, next);
       expect(next).toHaveBeenCalledWith(error);
     });
   });

@@ -4,7 +4,7 @@ import log from "debug";
 import chalk from "chalk";
 import { Board } from "../../database/models/board";
 import { User } from "../../database/models/user";
-import { OwnError } from "./usersControllers";
+import { OwnError } from "./usersController";
 import RequestAuth from "../utils/RequestAuth";
 
 const debug = log("own:boardscontroller");
@@ -63,6 +63,29 @@ const deleteBoard = async (
   }
 };
 
-// PUT
+const updateBoard = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id: boardId } = req.params;
+  const board = req.body;
+  try {
+    const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
+      new: true,
+    });
+    if (updatedBoard) {
+      res.json(updatedBoard);
+    } else {
+      const error = new OwnError("It was not possible to find the board");
+      error.code = 400;
+      next(error);
+    }
+  } catch {
+    const error = new OwnError("It was not possible to modify the board");
+    error.code = 400;
+    next(error);
+  }
+};
 
-export { createBoard, deleteBoard };
+export { createBoard, deleteBoard, updateBoard };

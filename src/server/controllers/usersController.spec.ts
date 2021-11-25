@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../../database/models/user";
-import { getUser, loginUser, OwnError, registerUser } from "./usersControllers";
+import { getUser, loginUser, OwnError, registerUser } from "./usersController";
 import mockRequest from "../mocks/mockRequest";
 import mockResponse from "../mocks/mockResponse";
 

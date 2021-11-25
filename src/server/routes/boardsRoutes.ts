@@ -1,6 +1,10 @@
 import express from "express";
 import { validate } from "express-validation";
-import { createBoard, deleteBoard } from "../controllers/boardsControllers";
+import {
+  createBoard,
+  deleteBoard,
+  updateBoard,
+} from "../controllers/boardsController";
 import firebase from "../middlewares/firebase";
 import boardsPath from "../paths/boardsPath";
 import uploadLogo from "../middlewares/uploadLogo";
@@ -15,8 +19,15 @@ router.post(
   validate(boardSchema),
   createBoard
 );
+
 router.delete(boardsPath.deleteBoard, deleteBoard);
 
-// router.patch(boardsPath.modifyBoard, updateBoard)
+router.patch(
+  boardsPath.updateBoard,
+  uploadLogo.single("logo"),
+  firebase,
+  validate(boardSchema),
+  updateBoard
+);
 
 export default router;
