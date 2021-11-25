@@ -2,8 +2,8 @@ import { Board } from "../../database/models/board";
 import { User } from "../../database/models/user";
 import mockRequestAuth from "../mocks/mockRequestAuth";
 import mockResponse from "../mocks/mockResponse";
-import { createBoard, deleteBoard } from "./boardsControllers";
-import { OwnError } from "./usersControllers";
+import { createBoard, deleteBoard } from "./boardsController";
+import { OwnError } from "./usersController";
 
 jest.mock("../../database/models/board");
 jest.mock("../../database/models/user");

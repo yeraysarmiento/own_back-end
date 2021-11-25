@@ -40,7 +40,7 @@ app.use(express.json());
 app.use("/user", usersRoutes);
 app.use("/board", auth, boardsRoutes);
 
-app.use("*", notFoundErrorHandler);
+app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
 
 export default initializeServer;
