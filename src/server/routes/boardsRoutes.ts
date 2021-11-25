@@ -23,12 +23,12 @@ router.post(
 
 router.delete(boardsPath.deleteBoard, authentication, deleteBoard);
 
-router.patch(
+router.put(
   boardsPath.updateBoard,
+  authentication,
   uploadLogo.single("logo"),
   firebase,
   validate(boardSchema),
-  authentication,
   updateBoard
 );
 
