@@ -16,18 +16,19 @@ const createBoard = async (
   res: Response,
   next: NextFunction
 ) => {
-  const image = req.file;
+  const image = req.file ? req.file : { fileURL: "" };
   try {
     const newBoard = await Board.create({
       ...req.body,
       logo: image.fileURL,
       posts: [],
     });
+
     await User.findOneAndUpdate(
       { _id: req.userId },
       { $push: { boards: newBoard.id } }
     );
-    debug(chalk.green(`New board created ${req.username}`));
+    debug(chalk.green(`New board created in user: ${req.username}`));
     res.json(newBoard);
   } catch {
     const error = new OwnError("Please, insert a valid board format");
@@ -61,5 +62,7 @@ const deleteBoard = async (
     next(error);
   }
 };
+
+// PUT
 
 export { createBoard, deleteBoard };
