@@ -63,7 +63,11 @@ const deleteBoard = async (
   }
 };
 
-const updateBoard = async (req, res, next) => {
+const updateBoard = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
   const { id: boardId } = req.params;
   const board = req.body;
   try {
