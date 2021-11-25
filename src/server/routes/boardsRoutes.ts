@@ -23,7 +23,7 @@ router.post(
 
 router.delete(boardsPath.deleteBoard, authentication, deleteBoard);
 
-router.put(
+router.patch(
   boardsPath.updateBoard,
   authentication,
   uploadLogo.single("logo"),
