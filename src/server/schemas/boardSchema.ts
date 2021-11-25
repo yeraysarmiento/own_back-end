@@ -11,7 +11,7 @@ const boardSchema = {
       instagram: Joi.string(),
       twitter: Joi.string(),
       facebook: Joi.string(),
-    }).required(),
+    }),
   }),
 };
 

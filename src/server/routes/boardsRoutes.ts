@@ -3,17 +3,14 @@ import { validate } from "express-validation";
 import { createBoard, deleteBoard } from "../controllers/boardsControllers";
 import firebase from "../middlewares/firebase";
 import boardsPath from "../paths/boardsPath";
-import upload from "../middlewares/upload";
+import uploadLogo from "../middlewares/uploadLogo";
 import boardSchema from "../schemas/boardSchema";
 
 const router = express.Router();
 
 router.post(
   boardsPath.createBoard,
-  (req, res, next) => {
-    next();
-  },
-  upload.single("logo"),
+  uploadLogo.single("logo"),
   firebase,
   validate(boardSchema),
   createBoard
