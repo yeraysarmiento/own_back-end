@@ -11,36 +11,18 @@ import {
 } from "../../database/models/user";
 import RequestAuth from "../utils/RequestAuth";
 import OwnError from "../utils/OwnError";
-import { Board } from "../../database/models/board";
 
 const debug = log("own:userscontroller");
 
 dotenv.config();
-
-export const getBoardsUser = async (
-  req: RequestAuth,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    Board.find();
-    res.json();
-  } catch (error) {
-    error.code = 400;
-    error.message = "Boards not available";
-    next(error);
-  }
-};
 
 const getProfile = async (
   req: RequestAuth,
   res: Response,
   next: NextFunction
 ) => {
-  const { id: idUser } = req.params;
-
   try {
-    const searchedUser = await User.findById(idUser).populate("boards");
+    const searchedUser = await User.findById(req.userId).populate("boards");
 
     if (searchedUser) {
       res.status(200);

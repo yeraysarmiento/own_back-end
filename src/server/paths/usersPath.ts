@@ -1,5 +1,5 @@
 const usersPath = {
-  getUser: "/:id",
+  getUser: "/",
   loginUser: "/login",
   registerUser: "/register",
 };
