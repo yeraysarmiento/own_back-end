@@ -12,7 +12,7 @@ import registerSchema from "../schemas/registerSchema";
 
 const router = express.Router();
 
-router.get(usersPath.getUser, auth, getProfile);
+router.get(usersPath.getProfile, auth, getProfile);
 router.post(usersPath.loginUser, validate(loginSchema), loginUser);
 router.post(usersPath.registerUser, validate(registerSchema), registerUser);
 
