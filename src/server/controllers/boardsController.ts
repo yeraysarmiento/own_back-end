@@ -44,12 +44,12 @@ const createBoard = async (
   res: Response,
   next: NextFunction
 ) => {
-  const image = req.file ? req.file : { fileURL: "" };
   try {
     const newBoard = await Board.create({
       ...req.body,
-      logo: image.fileURL,
-      papers: [],
+      logo: req.images[0]
+        ? req.images[0]
+        : "https://i.ibb.co/4Fyr9RL/no-pictures.png",
     });
     await User.findOneAndUpdate(
       { _id: req.userId },

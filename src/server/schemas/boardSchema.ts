@@ -12,6 +12,7 @@ const boardSchema = {
       twitter: Joi.string(),
       facebook: Joi.string(),
     }),
+    papers: Joi.array(),
   }),
 };
 

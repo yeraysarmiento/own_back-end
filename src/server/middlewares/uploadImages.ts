@@ -1,19 +1,21 @@
 import multer from "multer";
 import path from "path";
 
-const uploadLogo = multer({
+const uploadImages = multer({
   storage: multer.diskStorage({
     destination: "images",
+
     filename: (req, file, callback) => {
       const oldFilename = file.originalname;
       const oldFilenameExtension = path.extname(oldFilename);
 
-      const boardName = req.body.name ? req.body.name : "";
+      const paperName = req.body.title ? req.body.title : "";
+      const plainPaperName = paperName.replace(/ /g, "");
 
-      const newFilename = `logo-${boardName}-${Date.now()}${oldFilenameExtension}`;
+      const newFilename = `paper-${plainPaperName}-${Date.now()}${oldFilenameExtension}`;
       callback(null, newFilename);
     },
   }),
 });
 
-export default uploadLogo;
+export default uploadImages;

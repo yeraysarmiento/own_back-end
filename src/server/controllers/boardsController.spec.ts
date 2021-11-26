@@ -31,7 +31,7 @@ describe("Given a createBoard function", () => {
         papers: [],
       };
       const req = mockRequestAuth(newBoard);
-      req.file = { fileURL: newBoard.logo };
+      req.images = ["urlImage"];
       const res = mockResponse();
       const next = jest.fn();
 

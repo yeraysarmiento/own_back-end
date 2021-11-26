@@ -1,11 +1,18 @@
-// import express from "express";
-// import authentication from "../middlewares/authentication";
-// import papersPath from "../paths/papersPath";
+import express from "express";
+import createPaper from "../controllers/papersController";
+import firebase from "../middlewares/firebase";
+import uploadImages from "../middlewares/uploadImages";
+import papersPath from "../paths/papersPath";
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.post(papersPath.createPaper, authentication, createPaper);
-// // router.delete(papersPath.deletePaper, authentication, deletePaper);
-// // router.patch(papersPath.createPaper, authentication, updatePaper);
+router.post(
+  papersPath.createPaper,
+  uploadImages.array("images"),
+  firebase,
+  createPaper
+);
+// router.delete(papersPath.deletePaper, deletePaper);
+// router.patch(papersPath.createPaper, updatePaper);
 
-// export default router;
+export default router;

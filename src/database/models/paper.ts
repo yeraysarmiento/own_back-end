@@ -47,6 +47,7 @@ const paperSchema: Schema<PaperInterface> = new Schema({
   },
   images: {
     type: [String],
+    default: [],
   },
 });
 
