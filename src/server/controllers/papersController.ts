@@ -42,17 +42,17 @@ const deletePaper = async (
   next: NextFunction
 ) => {
   try {
-    const { id: paperId } = req.params;
+    const { idPaper } = req.params;
 
-    const paperDeleted = await Paper.findByIdAndDelete(paperId);
+    const paperDeleted = await Paper.findByIdAndDelete(idPaper);
     if (!paperDeleted) {
       const error = new OwnError("This paper does not exist in our database");
       error.code = 404;
       next(error);
     } else {
-      await User.findByIdAndUpdate(
-        { _id: req.userId },
-        { $pull: { papers: paperId } }
+      await Board.findOneAndUpdate(
+        { papers: idPaper },
+        { $pull: { papers: idPaper } }
       );
       res.json(paperDeleted);
     }
@@ -63,6 +63,34 @@ const deletePaper = async (
   }
 };
 
-// const updatePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
+const updatePaper = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  const { idPaper } = req.params;
+  const paper = req.body;
 
-export { createPaper, deletePaper };
+  if (req.images) {
+    [req.body.logo] = req.images;
+  }
+
+  try {
+    const updatedPaper = await Paper.findByIdAndUpdate(idPaper, paper, {
+      new: true,
+    });
+    if (updatedPaper) {
+      res.json(updatedPaper);
+    } else {
+      const error = new OwnError("It was not possible to find the paper");
+      error.code = 400;
+      next(error);
+    }
+  } catch {
+    const error = new OwnError("It was not possible to modify the paper");
+    error.code = 400;
+    next(error);
+  }
+};
+
+export { createPaper, deletePaper, updatePaper };

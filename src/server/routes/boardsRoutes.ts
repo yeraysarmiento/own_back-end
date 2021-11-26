@@ -9,12 +9,12 @@ import {
 import firebase from "../middlewares/firebase";
 import boardsPath from "../paths/boardsPath";
 import boardSchema from "../schemas/boardSchema";
-import authentication from "../middlewares/authentication";
 import uploadImages from "../middlewares/uploadImages";
+import boardAuthentication from "../middlewares/boardAuthentication";
 
 const router = express.Router();
 
-router.get(boardsPath.getBoard, authentication, getBoard);
+router.get(boardsPath.getBoard, boardAuthentication, getBoard);
 
 router.post(
   boardsPath.createBoard,
@@ -24,11 +24,11 @@ router.post(
   createBoard
 );
 
-router.delete(boardsPath.deleteBoard, authentication, deleteBoard);
+router.delete(boardsPath.deleteBoard, boardAuthentication, deleteBoard);
 
 router.patch(
   boardsPath.updateBoard,
-  authentication,
+  boardAuthentication,
   uploadImages.array("logo"),
   firebase,
   validate(boardSchema),
