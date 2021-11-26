@@ -8,13 +8,13 @@ const authentication = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id: boardId } = req.params;
+  const { idBoard } = req.params;
   const user = await User.findOne({ id: req.userId });
-  if (user.boards.includes(boardId)) {
+  if (user.boards.includes(idBoard)) {
     next();
   } else {
     const error = new OwnError("You are not allowed to edit");
-    error.code = 400;
+    error.code = 403;
     next(error);
   }
 };

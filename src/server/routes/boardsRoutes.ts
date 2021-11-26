@@ -3,6 +3,7 @@ import { validate } from "express-validation";
 import {
   createBoard,
   deleteBoard,
+  getBoard,
   updateBoard,
 } from "../controllers/boardsController";
 import firebase from "../middlewares/firebase";
@@ -12,6 +13,8 @@ import boardSchema from "../schemas/boardSchema";
 import authentication from "../middlewares/authentication";
 
 const router = express.Router();
+
+router.get(boardsPath.getBoard, authentication, getBoard);
 
 router.post(
   boardsPath.createBoard,
