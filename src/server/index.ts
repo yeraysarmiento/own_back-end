@@ -8,7 +8,6 @@ import usersRoutes from "./routes/usersRoutes";
 import boardsRoutes from "./routes/boardsRoutes";
 import papersRoutes from "./routes/papersRoutes";
 import auth from "./middlewares/auth";
-import authentication from "./middlewares/authentication";
 
 const debug = log("own:server");
 

@@ -35,7 +35,7 @@ const createPaper = async (
   }
 };
 
-const deletePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
-const updatePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
+// const deletePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
+// const updatePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
 
-export { createPaper, deletePaper, updatePaper };
+export default createPaper;
