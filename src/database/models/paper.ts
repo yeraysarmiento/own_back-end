@@ -28,7 +28,7 @@ const paperSchema: Schema<PaperInterface> = new Schema({
   },
   published: {
     type: Boolean,
-    required: true,
+    default: false,
   },
   type: {
     type: String,
@@ -40,7 +40,6 @@ const paperSchema: Schema<PaperInterface> = new Schema({
   },
   photograph: {
     type: String,
-    required: true,
   },
   text: {
     type: String,
