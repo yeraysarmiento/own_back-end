@@ -1,6 +1,6 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 
-interface PostInterface {
+interface PaperInterface {
   title: string;
   subtitle: string;
   year: number;
@@ -12,7 +12,7 @@ interface PostInterface {
   images: string[];
 }
 
-const postSchema: Schema<PostInterface> = new Schema({
+const paperSchema: Schema<PaperInterface> = new Schema({
   title: {
     type: String,
     required: true,
@@ -46,12 +46,10 @@ const postSchema: Schema<PostInterface> = new Schema({
     required: true,
   },
   images: {
-    type: [Types.ObjectId],
-    ref: "Post",
-    required: true,
+    type: [String],
   },
 });
 
-const Post = model("Post", postSchema);
+const Paper = model("Paper", paperSchema, "papers");
 
-export default Post;
+export default Paper;

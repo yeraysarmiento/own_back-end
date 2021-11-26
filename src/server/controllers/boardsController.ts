@@ -7,10 +7,37 @@ import { Board } from "../../database/models/board";
 import { User } from "../../database/models/user";
 import { OwnError } from "./usersController";
 import RequestAuth from "../utils/RequestAuth";
+import Paper from "../../database/models/paper";
 
 const debug = log("own:boardscontroller");
 
 dotenv.config();
+
+const a = Paper.find();
+
+const getBoard = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  const { idBoard } = req.params;
+
+  try {
+    const filledBoard = await Board.findById(idBoard).populate("papers");
+    if (filledBoard) {
+      res.status(200);
+      res.json(filledBoard);
+    } else {
+      const error = new OwnError("User not found in our server");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.message = "Not possible to get the papers";
+    error.code = 401;
+    next(error);
+  }
+};
 
 const createBoard = async (
   req: RequestAuth,
@@ -22,9 +49,8 @@ const createBoard = async (
     const newBoard = await Board.create({
       ...req.body,
       logo: image.fileURL,
-      posts: [],
+      papers: [],
     });
-
     await User.findOneAndUpdate(
       { _id: req.userId },
       { $push: { boards: newBoard.id } }
@@ -49,7 +75,7 @@ const deleteBoard = async (
     const boardDeleted = await Board.findByIdAndDelete(boardId);
     if (!boardDeleted) {
       const error = new OwnError("This board does not exist in our database");
-      error.code = 401;
+      error.code = 404;
       next(error);
     } else {
       await User.findByIdAndUpdate(
@@ -72,10 +98,9 @@ const updateBoard = async (
 ) => {
   const { id: boardId } = req.params;
   const board = req.body;
-  const { file } = req;
 
-  if (file) {
-    req.body.logo = file.fileURL;
+  if (req.file) {
+    req.body.logo = req.file.fileURL;
   }
 
   try {
@@ -96,4 +121,4 @@ const updateBoard = async (
   }
 };
 
-export { createBoard, deleteBoard, updateBoard };
+export { getBoard, createBoard, deleteBoard, updateBoard };

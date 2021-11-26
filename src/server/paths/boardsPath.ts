@@ -1,7 +1,8 @@
 const boardsPath = {
+  getBoard: "/:idBoard",
   createBoard: "/new",
-  deleteBoard: "/delete/:id",
-  updateBoard: "/update/:id",
+  deleteBoard: "/delete/:idBoard",
+  updateBoard: "/update/:idBoard",
 };
 
 export default boardsPath;

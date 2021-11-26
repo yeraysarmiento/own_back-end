@@ -13,7 +13,7 @@ interface BoardInterface {
   logo: string;
   category: string;
   social: SocialInterface;
-  posts: string[];
+  papers: string[];
 }
 
 const boardSchema: Schema<BoardInterface> = new Schema({
@@ -42,9 +42,9 @@ const boardSchema: Schema<BoardInterface> = new Schema({
     facebook: { type: String },
     twitter: { type: String },
   },
-  posts: {
+  papers: {
     type: [Types.ObjectId],
-    ref: "Post",
+    ref: "Paper",
     required: true,
   },
 });

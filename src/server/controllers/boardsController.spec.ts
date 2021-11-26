@@ -23,7 +23,7 @@ describe("Given a createBoard function", () => {
           twitter: "string",
           facebook: "string",
         },
-        posts: [],
+        papers: [],
       };
       const req = mockRequestAuth(newBoard);
       req.file = { fileURL: newBoard.logo };
@@ -33,7 +33,7 @@ describe("Given a createBoard function", () => {
       Board.create = jest.fn().mockResolvedValue({
         ...req.body,
         logo: newBoard.logo,
-        posts: [],
+        papers: [],
       });
 
       User.findOneAndUpdate = jest.fn().mockResolvedValue({});
@@ -126,7 +126,7 @@ describe("Given a createBoard function", () => {
           twitter: "string",
           facebook: "string",
         },
-        posts: [],
+        papers: [],
       };
       Board.findByIdAndUpdate = jest.fn().mockResolvedValue(updatedBoard);
       const req = mockRequestAuth(null, null, { id: updatedBoard.id });
@@ -151,7 +151,7 @@ describe("Given a createBoard function", () => {
           twitter: "string",
           facebook: "string",
         },
-        posts: [],
+        papers: [],
       };
       const error = new OwnError("It was not possible to find the board");
       Board.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
