@@ -9,7 +9,7 @@ const authentication = async (
   next: NextFunction
 ) => {
   const { idBoard } = req.params;
-  const user = await User.findOne({ id: req.userId });
+  const user = await User.findOne({ _id: req.userId });
   if (user.boards.includes(idBoard)) {
     next();
   } else {

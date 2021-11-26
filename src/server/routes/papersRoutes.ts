@@ -1,5 +1,9 @@
 import express from "express";
-import { createPaper, deletePaper } from "../controllers/papersController";
+import {
+  createPaper,
+  deletePaper,
+  updatePaper,
+} from "../controllers/papersController";
 import firebase from "../middlewares/firebase";
 import uploadImages from "../middlewares/uploadImages";
 import papersPath from "../paths/papersPath";
@@ -13,6 +17,6 @@ router.post(
   createPaper
 );
 router.delete(papersPath.deletePaper, deletePaper);
-// router.patch(papersPath.createPaper, updatePaper);
+router.patch(papersPath.createPaper, updatePaper);
 
 export default router;

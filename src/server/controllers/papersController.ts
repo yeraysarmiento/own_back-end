@@ -63,6 +63,6 @@ const deletePaper = async (
   }
 };
 
-// const updatePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
+const updatePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
 
-export { createPaper, deletePaper };
+export { createPaper, deletePaper, updatePaper };
