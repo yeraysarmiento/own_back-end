@@ -8,6 +8,7 @@ import usersRoutes from "./routes/usersRoutes";
 import boardsRoutes from "./routes/boardsRoutes";
 // import papersRoutes from "./routes/papersRoutes";
 import auth from "./middlewares/auth";
+import authentication from "./middlewares/authentication";
 // import Paper from "../database/models/paper";
 
 const debug = log("own:server");
@@ -40,7 +41,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/user", usersRoutes);
-app.use("/board", auth, boardsRoutes);
+app.use("/board", auth, authentication, boardsRoutes);
 // app.use("/papers", auth, papersRoutes);
 
 app.use(notFoundErrorHandler);
