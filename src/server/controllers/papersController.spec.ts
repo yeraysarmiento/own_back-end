@@ -9,7 +9,7 @@ import {
   getBoard,
   updateBoard,
 } from "./boardsController";
-import { createPaper } from "./papersController";
+import { createPaper, deletePaper } from "./papersController";
 import { OwnError } from "./usersController";
 
 jest.mock("../../database/models/board");
@@ -49,6 +49,55 @@ describe("Given a createPaper function", () => {
       const next = jest.fn();
 
       await createPaper(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a deletePaper function", () => {
+  describe("When it receives a req object with a paper id on its params", () => {
+    test("Then it should invoke the method json with the paper deleted", async () => {
+      const deletedPaper = {
+        id: 1,
+      };
+      const req = mockRequestAuth(null, null, { id: deletedPaper.id });
+      const res = mockResponse();
+
+      const next = jest.fn();
+      Paper.findByIdAndDelete = jest.fn().mockResolvedValue(deletedPaper);
+      Board.findOneAndUpdate = jest.fn().mockResolvedValue(null);
+
+      await deletePaper(req, res, next);
+
+      expect(res.json).toHaveBeenCalledWith(deletedPaper);
+    });
+  });
+  describe("When it receives a wrong req object with a paper id on its params", () => {
+    test("Then it should invoke next with an error", async () => {
+      const deletedPaper = {
+        id: 1,
+      };
+      const req = mockRequestAuth(null, null, { id: deletedPaper.id });
+      const res = mockResponse();
+      const error = new OwnError("This paper does not exist in our database");
+      const next = jest.fn();
+      Paper.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+
+      await deletePaper(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+  describe("When it receives a req object without an id on its params", () => {
+    test("Then it should invoke next with an error message 'It was not possible to delete the paper'", async () => {
+      const req = mockRequestAuth(null, null, { id: 1 });
+      const res = mockResponse();
+      const error = new OwnError("It was not possible to delete the paper");
+      const next = jest.fn();
+      Paper.findByIdAndDelete = jest.fn().mockRejectedValue(null);
+
+      await deletePaper(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });

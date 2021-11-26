@@ -85,8 +85,8 @@ describe("Given a deleteBoard function", () => {
       expect(res.json).toHaveBeenCalled();
     });
   });
-  describe("When it receives a req object with a board id on its params", () => {
-    test("Then it should invoke the method json with the board deleted", async () => {
+  describe("When it receives a wrong req object with a board id on its params", () => {
+    test("Then it should invoke next with an error", async () => {
       const deletedBoard = {
         id: 1,
       };
