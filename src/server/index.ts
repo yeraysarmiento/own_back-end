@@ -6,10 +6,9 @@ import chalk from "chalk";
 import { generalErrorHandler, notFoundErrorHandler } from "./middlewares/error";
 import usersRoutes from "./routes/usersRoutes";
 import boardsRoutes from "./routes/boardsRoutes";
-// import papersRoutes from "./routes/papersRoutes";
+import papersRoutes from "./routes/papersRoutes";
 import auth from "./middlewares/auth";
 import authentication from "./middlewares/authentication";
-// import Paper from "../database/models/paper";
 
 const debug = log("own:server");
 
@@ -42,7 +41,7 @@ app.use(express.json());
 
 app.use("/user", usersRoutes);
 app.use("/board", auth, authentication, boardsRoutes);
-// app.use("/papers", auth, papersRoutes);
+app.use("/paper", auth, papersRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);

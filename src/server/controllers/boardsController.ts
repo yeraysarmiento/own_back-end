@@ -49,7 +49,7 @@ const createBoard = async (
     const newBoard = await Board.create({
       ...req.body,
       logo: image.fileURL,
-      papers: [],
+      // papers: [],
     });
     await User.findOneAndUpdate(
       { _id: req.userId },

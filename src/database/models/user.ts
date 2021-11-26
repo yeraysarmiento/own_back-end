@@ -28,7 +28,7 @@ const userSchema: Schema<UserInterface> = new Schema({
   boards: {
     type: [Types.ObjectId],
     ref: "Board",
-    required: true,
+    default: [],
   },
 });
 

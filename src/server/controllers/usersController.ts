@@ -96,7 +96,7 @@ const registerUser = async (
         username: userToRegister.username,
         password,
         email: userToRegister.email,
-        boards: [],
+        // boards: [],
       });
 
       debug(

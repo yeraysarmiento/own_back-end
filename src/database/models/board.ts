@@ -45,7 +45,7 @@ const boardSchema: Schema<BoardInterface> = new Schema({
   papers: {
     type: [Types.ObjectId],
     ref: "Paper",
-    required: true,
+    default: [],
   },
 });
 
