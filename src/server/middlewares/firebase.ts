@@ -20,9 +20,9 @@ const firebase = async (req, res, next) => {
       return fileURL;
     });
 
-    debug(chalk.green("Files correctly loaded"));
     const images = await Promise.all(getImages);
     req.images = images;
+    debug(chalk.green(`A total of ${images.length} images have been uploaded`));
     next();
   } catch (error) {
     error.code = 400;

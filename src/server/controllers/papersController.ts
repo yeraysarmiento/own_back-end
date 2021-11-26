@@ -6,7 +6,6 @@ import RequestAuth from "../utils/RequestAuth";
 import Paper from "../../database/models/paper";
 import { Board } from "../../database/models/board";
 import { OwnError } from "./usersController";
-import { User } from "../../database/models/user";
 
 const debug = log("own:paperscontroller");
 
@@ -72,7 +71,7 @@ const updatePaper = async (
   const paper = req.body;
 
   if (req.images) {
-    [req.body.logo] = req.images;
+    req.body.images = req.images;
   }
 
   try {

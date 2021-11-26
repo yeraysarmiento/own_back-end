@@ -20,6 +20,11 @@ router.post(
 
 router.delete(papersPath.deletePaper, paperAuthentication, deletePaper);
 
-router.patch(papersPath.createPaper, updatePaper);
+router.patch(
+  papersPath.updatePaper,
+  uploadImages.array("images"),
+  firebase,
+  updatePaper
+);
 
 export default router;
