@@ -10,6 +10,7 @@ interface PaperInterface {
   photograph: string;
   text: string;
   images: string[];
+  deleted: boolean;
 }
 
 const paperSchema: Schema<PaperInterface> = new Schema({
@@ -48,6 +49,10 @@ const paperSchema: Schema<PaperInterface> = new Schema({
   images: {
     type: [String],
     default: [],
+  },
+  deleted: {
+    type: Boolean,
+    default: false,
   },
 });
 
