@@ -1,17 +1,12 @@
 import RequestAuth from "../utils/RequestAuth";
 
-const mockRequestAuth = (
-  body?: any,
-  header?: any,
-  params?: any,
-  file?: any
-) => {
+const mockRequestAuth = (body?: any, header?: any, params?: any) => {
   const req = {} as RequestAuth;
   req.body = body;
   req.header = jest.fn().mockReturnValue(header);
   req.userId = "";
   req.params = params;
-  req.file = file;
+  req.images = "";
 
   return req;
 };
