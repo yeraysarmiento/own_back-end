@@ -1,19 +1,11 @@
 import { Board } from "../../database/models/board";
 import Paper from "../../database/models/paper";
-import { User } from "../../database/models/user";
 import mockRequestAuth from "../mocks/mockRequestAuth";
 import mockResponse from "../mocks/mockResponse";
-import {
-  createBoard,
-  deleteBoard,
-  getBoard,
-  updateBoard,
-} from "./boardsController";
-import { createPaper, deletePaper } from "./papersController";
+import { createPaper, deletePaper, updatePaper } from "./papersController";
 import { OwnError } from "./usersController";
 
 jest.mock("../../database/models/board");
-jest.mock("../../database/models/user");
 jest.mock("../../database/models/paper");
 
 describe("Given a createPaper function", () => {
@@ -99,6 +91,87 @@ describe("Given a deletePaper function", () => {
 
       await deletePaper(req, res, next);
 
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a updatePaper function", () => {
+  describe("When it receives a req object with a paper to update and a valid id", () => {
+    test("Then it should invoke method json with the paper already updated", async () => {
+      const updatedPaper = {
+        id: 1,
+        title: "Casa Ter",
+        subtitle: "by Mesura",
+        year: 2021,
+        published: false,
+        type: "Residential",
+        location: "Baix Empordà",
+        photograph: "José Hevia",
+        text: "description",
+        images: [],
+      };
+      Paper.findByIdAndUpdate = jest.fn().mockResolvedValue(updatedPaper);
+      const req = mockRequestAuth(updatedPaper, null, {
+        idPaper: updatedPaper.id,
+      });
+      req.images = "images";
+
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updatePaper(req, res, next);
+      expect(res.json).toHaveBeenCalledWith(updatedPaper);
+    });
+  });
+  describe("When it receives a req object with a paper to update and a not valid id", () => {
+    test("Then it should invoke next with an error and a message 'It was not possible to find the paper'", async () => {
+      const updatedPaper = {
+        id: 1,
+        title: "Casa Ter",
+        subtitle: "by Mesura",
+        year: 2021,
+        published: false,
+        type: "Residential",
+        location: "Baix Empordà",
+        photograph: "José Hevia",
+        text: "description",
+        images: [],
+      };
+      const error = new OwnError("It was not possible to find the paper");
+      Paper.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
+      const req = mockRequestAuth(updatedPaper, null, {
+        idPaper: updatedPaper.id,
+      });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updatePaper(req, res, next);
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe("When it receives a req object with a paper to update and a not valid id", () => {
+    test("Then it should invoke next with an error and a message 'It was not possible to find the paper'", async () => {
+      const error = new OwnError("It was not possible to find the paper");
+      Paper.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
+      const req = mockRequestAuth(null, null, { idPaper: 1 });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updatePaper(req, res, next);
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+  describe("When it receives a req object with a paper to update but the petition fails", () => {
+    test("Then it should invoke next with an error and a message 'It was not possible to modify the paper'", async () => {
+      const error = new OwnError("It was not possible to modify the paper");
+      Paper.findByIdAndUpdate = jest.fn().mockRejectedValue({});
+      const req = mockRequestAuth(null, null, { idPaper: 1 });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await updatePaper(req, res, next);
       expect(next).toHaveBeenCalledWith(error);
     });
   });
