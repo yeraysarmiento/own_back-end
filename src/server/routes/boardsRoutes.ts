@@ -8,26 +8,28 @@ import {
 } from "../controllers/boardsController";
 import firebase from "../middlewares/firebase";
 import boardsPath from "../paths/boardsPath";
-import uploadLogo from "../middlewares/uploadLogo";
 import boardSchema from "../schemas/boardSchema";
+import authentication from "../middlewares/authentication";
+import uploadImages from "../middlewares/uploadImages";
 
 const router = express.Router();
 
-router.get(boardsPath.getBoard, getBoard);
+router.get(boardsPath.getBoard, authentication, getBoard);
 
 router.post(
   boardsPath.createBoard,
-  uploadLogo.single("logo"),
+  uploadImages.array("logo"),
   firebase,
   validate(boardSchema),
   createBoard
 );
 
-router.delete(boardsPath.deleteBoard, deleteBoard);
+router.delete(boardsPath.deleteBoard, authentication, deleteBoard);
 
 router.patch(
   boardsPath.updateBoard,
-  uploadLogo.single("logo"),
+  authentication,
+  uploadImages.array("logo"),
   firebase,
   validate(boardSchema),
   updateBoard

@@ -6,6 +6,7 @@ interface RequestAuth extends Request {
   username?: string;
   file?: any;
   files?: any;
+  images?: any;
 }
 
 export default RequestAuth;

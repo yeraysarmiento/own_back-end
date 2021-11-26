@@ -31,7 +31,7 @@ const boardSchema: Schema<BoardInterface> = new Schema({
   },
   logo: {
     type: String,
-    required: true,
+    default: "",
   },
   category: {
     type: String,

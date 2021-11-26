@@ -40,7 +40,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/user", usersRoutes);
-app.use("/board", auth, authentication, boardsRoutes);
+app.use("/board", auth, boardsRoutes);
 app.use("/paper", auth, papersRoutes);
 
 app.use(notFoundErrorHandler);

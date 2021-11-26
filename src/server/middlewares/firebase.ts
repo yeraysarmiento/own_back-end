@@ -12,8 +12,7 @@ admin.initializeApp({
 const firebase = async (req, res, next) => {
   const bucket = admin.storage().bucket();
   try {
-    req.body.images = [];
-
+    req.images = [];
     const getImages = req.files.map(async (image) => {
       await bucket.upload(image.path);
       await bucket.file(image.filename).makePublic();
@@ -21,8 +20,9 @@ const firebase = async (req, res, next) => {
       return fileURL;
     });
 
+    debug(chalk.green("Files correctly loaded"));
     const images = await Promise.all(getImages);
-    req.body.images = images;
+    req.images = images;
     next();
   } catch (error) {
     error.code = 400;

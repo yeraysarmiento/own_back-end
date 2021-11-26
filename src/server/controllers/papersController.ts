@@ -20,7 +20,7 @@ const createPaper = async (
   try {
     const newPaper = await Paper.create({
       ...req.body,
-      images: req.body.images,
+      images: req.images,
     });
     await Board.findOneAndUpdate(
       { _id: idBoard },
