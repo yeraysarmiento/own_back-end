@@ -28,12 +28,12 @@ const getBoard = async (
       res.status(200);
       res.json(filledBoard);
     } else {
-      const error = new OwnError("User not found in our server");
+      const error = new OwnError("Board not found in our server");
       error.code = 404;
       next(error);
     }
   } catch (error) {
-    error.message = "Not possible to get the papers";
+    error.message = "Not possible to get the board";
     error.code = 401;
     next(error);
   }

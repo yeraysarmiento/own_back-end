@@ -2,7 +2,12 @@ import { Board } from "../../database/models/board";
 import { User } from "../../database/models/user";
 import mockRequestAuth from "../mocks/mockRequestAuth";
 import mockResponse from "../mocks/mockResponse";
-import { createBoard, deleteBoard, updateBoard } from "./boardsController";
+import {
+  createBoard,
+  deleteBoard,
+  getBoard,
+  updateBoard,
+} from "./boardsController";
 import { OwnError } from "./usersController";
 
 jest.mock("../../database/models/board");
@@ -111,7 +116,7 @@ describe("Given a deleteBoard function", () => {
   });
 });
 
-describe("Given a createBoard function", () => {
+describe("Given a updateBoard function", () => {
   describe("When it receives a req object with a board to update and a valid id", () => {
     test("Then it should invoke method json with the board already updated", async () => {
       const updatedBoard = {
@@ -130,6 +135,7 @@ describe("Given a createBoard function", () => {
       };
       Board.findByIdAndUpdate = jest.fn().mockResolvedValue(updatedBoard);
       const req = mockRequestAuth(null, null, { id: updatedBoard.id });
+
       const res = mockResponse();
       const next = jest.fn();
 
@@ -185,6 +191,67 @@ describe("Given a createBoard function", () => {
       const next = jest.fn();
 
       await updateBoard(req, res, next);
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a getBoard controller", () => {
+  describe("When it receives a valid Board id", () => {
+    test("Then it should invoke json with the board", async () => {
+      const board = {
+        id: 1,
+        name: "string",
+        about: "string",
+        email: "string",
+        logo: "string",
+        category: "string",
+        social: {
+          instagram: "string",
+          twitter: "string",
+          facebook: "string",
+        },
+        papers: [],
+      };
+
+      Board.findById = jest
+        .fn()
+        .mockReturnValue({ populate: jest.fn().mockResolvedValue(board) });
+      const req = mockRequestAuth(null, null, { id: 1 });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await getBoard(req, res, next);
+
+      expect(res.json).toHaveBeenCalledWith(board);
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+  });
+  describe("When it receives a not valid Board id", () => {
+    test("Then it should invoke json with an error and a message 'Board not found in our server'", async () => {
+      const error = new OwnError("Board not found in our server");
+      Board.findById = jest
+        .fn()
+        .mockReturnValue({ populate: jest.fn().mockResolvedValue(null) });
+      const req = mockRequestAuth(null, null, { id: 1 });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await getBoard(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+  describe("When it receives a not valid request", () => {
+    test("Then it should invoke json with an error and a message 'Not possible to get the board'", async () => {
+      const error = new OwnError("Not possible to get the board");
+      Board.findById = jest.fn().mockReturnValue(null);
+      const req = mockRequestAuth(null, null, { id: 1 });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await getBoard(req, res, next);
+
       expect(next).toHaveBeenCalledWith(error);
     });
   });
