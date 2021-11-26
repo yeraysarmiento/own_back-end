@@ -3,7 +3,7 @@ import { User } from "../../database/models/user";
 import OwnError from "../utils/OwnError";
 import RequestAuth from "../utils/RequestAuth";
 
-const authentication = async (
+const boardAuthentication = async (
   req: RequestAuth,
   res: Response,
   next: NextFunction
@@ -19,4 +19,4 @@ const authentication = async (
   }
 };
 
-export default authentication;
+export default boardAuthentication;
