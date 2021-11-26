@@ -6,6 +6,7 @@ import RequestAuth from "../utils/RequestAuth";
 import Paper from "../../database/models/paper";
 import { Board } from "../../database/models/board";
 import { OwnError } from "./usersController";
+import { User } from "../../database/models/user";
 
 const debug = log("own:paperscontroller");
 
@@ -35,7 +36,33 @@ const createPaper = async (
   }
 };
 
-// const deletePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
+const deletePaper = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id: paperId } = req.params;
+
+    const paperDeleted = await Paper.findByIdAndDelete(paperId);
+    if (!paperDeleted) {
+      const error = new OwnError("This paper does not exist in our database");
+      error.code = 404;
+      next(error);
+    } else {
+      await User.findByIdAndUpdate(
+        { _id: req.userId },
+        { $pull: { papers: paperId } }
+      );
+      res.json(paperDeleted);
+    }
+  } catch {
+    const error = new OwnError("It was not possible to delete the paper");
+    error.code = 400;
+    next(error);
+  }
+};
+
 // const updatePaper = (req: RequestAuth, res: Response, next: NextFunction) => {};
 
-export default createPaper;
+export { createPaper, deletePaper };
