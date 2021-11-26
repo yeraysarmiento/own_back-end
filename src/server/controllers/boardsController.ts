@@ -13,7 +13,7 @@ const debug = log("own:boardscontroller");
 
 dotenv.config();
 
-const a = Paper.find();
+Paper.find();
 
 const getBoard = async (
   req: RequestAuth,
