@@ -5,6 +5,7 @@ interface RequestAuth extends Request {
   userId?: string;
   username?: string;
   file?: any;
+  files?: any;
 }
 
 export default RequestAuth;

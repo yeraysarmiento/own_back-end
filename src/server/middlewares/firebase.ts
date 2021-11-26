@@ -10,17 +10,23 @@ admin.initializeApp({
 });
 
 const firebase = async (req, res, next) => {
+  const bucket = admin.storage().bucket();
   try {
-    const bucket = admin.storage().bucket();
-    await bucket.upload(req.file.path);
-    await bucket.file(req.file.filename).makePublic();
-    const fileURL = bucket.file(req.file.filename).publicUrl();
-    debug(chalk.green(fileURL));
-    req.file.fileURL = fileURL;
+    req.body.images = [];
+
+    const getImages = req.files.map(async (image) => {
+      await bucket.upload(image.path);
+      await bucket.file(image.filename).makePublic();
+      const fileURL = bucket.file(image.filename).publicUrl();
+      return fileURL;
+    });
+
+    const images = await Promise.all(getImages);
+    req.body.images = images;
     next();
   } catch (error) {
     error.code = 400;
-    error.message = "Something failed while uploading to firebase";
+    error.message = "There has been an error with firebase";
     next();
   }
 };

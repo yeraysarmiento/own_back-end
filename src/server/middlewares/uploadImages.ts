@@ -4,6 +4,7 @@ import path from "path";
 const uploadImages = multer({
   storage: multer.diskStorage({
     destination: "images",
+
     filename: (req, file, callback) => {
       const oldFilename = file.originalname;
       const oldFilenameExtension = path.extname(oldFilename);

@@ -9,7 +9,7 @@ interface PaperInterface {
   location: string;
   photograph: string;
   text: string;
-  images: string;
+  images: string[];
 }
 
 const paperSchema: Schema<PaperInterface> = new Schema({
@@ -46,7 +46,8 @@ const paperSchema: Schema<PaperInterface> = new Schema({
     required: true,
   },
   images: {
-    type: String,
+    type: [String],
+    default: [],
   },
 });
 

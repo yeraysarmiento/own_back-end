@@ -16,12 +16,11 @@ const createPaper = async (
   res: Response,
   next: NextFunction
 ) => {
-  const image = req.file ? req.file : { fileURL: "" };
   const { idBoard } = req.params;
   try {
     const newPaper = await Paper.create({
       ...req.body,
-      images: image.fileURL,
+      images: req.body.images,
     });
     await Board.findOneAndUpdate(
       { _id: idBoard },

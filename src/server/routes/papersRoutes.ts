@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post(
   papersPath.createPaper,
-  uploadImages.single("images"),
+  uploadImages.array("images"),
   firebase,
   createPaper
 );
