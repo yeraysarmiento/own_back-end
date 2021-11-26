@@ -70,9 +70,9 @@ const deleteBoard = async (
   next: NextFunction
 ) => {
   try {
-    const { id: boardId } = req.params;
+    const { idBoard } = req.params;
 
-    const boardDeleted = await Board.findByIdAndDelete(boardId);
+    const boardDeleted = await Board.findByIdAndDelete(idBoard);
     if (!boardDeleted) {
       const error = new OwnError("This board does not exist in our database");
       error.code = 404;
@@ -80,7 +80,7 @@ const deleteBoard = async (
     } else {
       await User.findByIdAndUpdate(
         { _id: req.userId },
-        { $pull: { boards: boardId } }
+        { $pull: { boards: idBoard } }
       );
       res.json(boardDeleted);
     }
@@ -96,15 +96,14 @@ const updateBoard = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id: boardId } = req.params;
+  const { idBoard } = req.params;
   const board = req.body;
-
-  if (req.file) {
-    req.body.logo = req.file.fileURL;
+  if (req.images) {
+    [req.body.logo] = req.images;
   }
 
   try {
-    const updatedBoard = await Board.findByIdAndUpdate(boardId, board, {
+    const updatedBoard = await Board.findByIdAndUpdate(idBoard, board, {
       new: true,
     });
     if (updatedBoard) {
