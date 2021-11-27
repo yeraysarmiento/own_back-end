@@ -45,4 +45,4 @@ app.use("/paper", auth, papersRoutes);
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
 
-export default initializeServer;
+export { initializeServer, app };
