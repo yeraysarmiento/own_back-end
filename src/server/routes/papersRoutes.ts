@@ -3,8 +3,10 @@ import { validate } from "express-validation";
 import {
   createPaper,
   deletePaper,
+  getPaginatedPapers,
   updatePaper,
 } from "../controllers/papersController";
+import boardAuthentication from "../middlewares/boardAuthentication";
 import firebase from "../middlewares/firebase";
 import paperAuthentication from "../middlewares/paperAuthentication";
 import uploadImages from "../middlewares/uploadImages";
@@ -12,6 +14,8 @@ import papersPath from "../paths/papersPath";
 import paperSchema from "../schemas/paperSchema";
 
 const router = express.Router();
+
+router.get("/:idBoard?", boardAuthentication, getPaginatedPapers);
 
 router.post(
   papersPath.createPaper,

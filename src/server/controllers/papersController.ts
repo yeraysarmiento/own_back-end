@@ -6,6 +6,7 @@ import RequestAuth from "../utils/RequestAuth";
 import Paper from "../../database/models/paper";
 import { Board } from "../../database/models/board";
 import { OwnError } from "./usersController";
+import papersPath from "../paths/papersPath";
 
 const debug = log("own:paperscontroller");
 
@@ -92,4 +93,31 @@ const updatePaper = async (
   }
 };
 
-export { createPaper, deletePaper, updatePaper };
+const getPaginatedPapers = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idBoard } = req.params;
+    const page = +req.query.page;
+    const limit = +req.query.limit;
+
+    const board = await Board.findById(idBoard).populate("papers");
+    const { papers } = board;
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const paperList = papers.slice(startIndex, endIndex);
+
+    res.status(200);
+    res.json(paperList);
+  } catch {
+    const error = new OwnError("Pagination not possible");
+    error.code = 400;
+    next(error);
+  }
+};
+
+export { createPaper, deletePaper, updatePaper, getPaginatedPapers };
