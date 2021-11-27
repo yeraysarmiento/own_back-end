@@ -8,6 +8,7 @@ import usersRoutes from "./routes/usersRoutes";
 import boardsRoutes from "./routes/boardsRoutes";
 import papersRoutes from "./routes/papersRoutes";
 import auth from "./middlewares/auth";
+import { Board } from "../database/models/board";
 
 const debug = log("own:server");
 
@@ -19,7 +20,6 @@ const initializeServer = (port: number) =>
       debug(chalk.green(`Connected to port ${port}`));
       resolve(server);
     });
-
     server.on("error", (error: { code: string }) => {
       debug(chalk.red("Error initializing Server"));
       if (error.code === "EADDRINUSE") {

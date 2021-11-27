@@ -3,6 +3,7 @@ import { Schema, model } from "mongoose";
 interface PaperInterface {
   title: string;
   subtitle: string;
+  author: string;
   year: number;
   published: boolean;
   type: string;
@@ -21,6 +22,9 @@ const paperSchema: Schema<PaperInterface> = new Schema({
   subtitle: {
     type: String,
     required: true,
+  },
+  author: {
+    type: String,
   },
   year: {
     type: Number,
