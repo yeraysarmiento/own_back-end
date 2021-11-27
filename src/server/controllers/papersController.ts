@@ -92,28 +92,22 @@ const updatePaper = async (
   }
 };
 
-const getPaginatedPapers = async (
-  req: RequestAuth,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const page = +req.query.page;
-    const limit = +req.query.limit;
+const getPaginatedPapers = async (req: RequestAuth, res: Response) => {
+  const page = +req.query.page;
+  const limit = +req.query.limit;
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
 
-    const papers = req.body;
+  const papers = req.body;
 
-    const paperList = papers.slice(startIndex, endIndex);
+  const paperList = papers.slice(startIndex, endIndex);
 
+  if (paperList.length === 0) {
+    res.json([]);
+  } else {
     res.status(200);
     res.json(paperList);
-  } catch {
-    const error = new OwnError("Pagination not possible");
-    error.code = 400;
-    next(error);
   }
 };
 
@@ -122,15 +116,12 @@ const filterPapers = async (
   res: Response,
   next: NextFunction
 ) => {
-  const filterBy: any = req.query.filterby;
-  const filterWith: any = req.query.filter;
-
   try {
+    const filterBy: any = req.query.filterby;
+    const filterWith: any = req.query.filter;
     const { idBoard } = req.params;
-
     const board = await Board.findById(idBoard).populate("papers");
     const { papers } = board;
-
     const papersList = papers.filter((paper) => paper[filterBy] === filterWith);
 
     req.body = papersList;
@@ -142,33 +133,6 @@ const filterPapers = async (
     next(error);
   }
 };
-
-// const getPaginatedPapers = async (
-//   req: RequestAuth,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const { idBoard } = req.params;
-//     const page = +req.query.page;
-//     const limit = +req.query.limit;
-
-//     const board = await Board.findById(idBoard).populate("papers");
-//     const { papers } = board;
-
-//     const startIndex = (page - 1) * limit;
-//     const endIndex = page * limit;
-
-//     const paperList = papers.slice(startIndex, endIndex);
-
-//     res.status(200);
-//     res.json(paperList);
-//   } catch {
-//     const error = new OwnError("Pagination not possible");
-//     error.code = 400;
-//     next(error);
-//   }
-// };
 
 export {
   createPaper,

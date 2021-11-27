@@ -2,7 +2,13 @@ import { Board } from "../../database/models/board";
 import Paper from "../../database/models/paper";
 import mockRequestAuth from "../mocks/mockRequestAuth";
 import mockResponse from "../mocks/mockResponse";
-import { createPaper, deletePaper, updatePaper } from "./papersController";
+import {
+  createPaper,
+  deletePaper,
+  filterPapers,
+  getPaginatedPapers,
+  updatePaper,
+} from "./papersController";
 import { OwnError } from "./usersController";
 
 jest.mock("../../database/models/board");
@@ -172,6 +178,109 @@ describe("Given a updatePaper function", () => {
       const next = jest.fn();
 
       await updatePaper(req, res, next);
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a getPaginatedPapers controller", () => {
+  describe("When it receives by query a page and a limit and a req with an array object", () => {
+    test("Then it should invoke the method json with the filtered array", async () => {
+      const papersList = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+      ];
+
+      const slicedList = [{ id: 1 }, { id: 2 }];
+
+      const req = mockRequestAuth(papersList, null, null, {
+        page: 1,
+        limit: 2,
+      });
+      const res = mockResponse();
+
+      await getPaginatedPapers(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(slicedList);
+    });
+  });
+  describe("When it receives wrong or any parameters by query", () => {
+    test("Then it should invoke json with an empty array", async () => {
+      const papersList = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+      ];
+
+      const req = mockRequestAuth(papersList, null, null, {
+        test: 1,
+      });
+      const res = mockResponse();
+
+      await getPaginatedPapers(req, res);
+
+      expect(res.json).toHaveBeenCalledWith([]);
+    });
+  });
+});
+
+describe("Given a filterPapers middleware", () => {
+  describe("When it receives a 'filterby' and a 'filter' queries with a valid idBoard", () => {
+    test("Then it should invoke next method", async () => {
+      const papersList = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+      ];
+      const idBoard = 1;
+      const page = 1;
+      const limit = 2;
+
+      Board.findById = jest.fn().mockResolvedValue({ papers: papersList });
+      const req = mockRequestAuth(
+        papersList,
+        null,
+        { idBoard },
+        {
+          page,
+          limit,
+        }
+      );
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await filterPapers(req, res, next);
+
+      expect(next).toHaveBeenCalled();
+      expect(req.body).toEqual(papersList);
+    });
+  });
+  describe("When it receives a not valid board id", () => {
+    test("Then it should invoke error with a message 'Filtration not possible'", async () => {
+      const papersList = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+      ];
+      const idBoard = 1;
+      const error = new OwnError("Filtration not possible");
+
+      Board.findById = jest.fn().mockRejectedValue(null);
+      const req = mockRequestAuth(papersList, null, { idBoard });
+      const res = mockResponse();
+      const next = jest.fn();
+
+      await filterPapers(req, res, next);
+
       expect(next).toHaveBeenCalledWith(error);
     });
   });
