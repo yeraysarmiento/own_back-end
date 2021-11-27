@@ -98,7 +98,7 @@ describe("Given a /register endpoint", () => {
           password: "Lola",
           email: "loling@loling.com",
         })
-        .expect(201);
+        .expect(200);
     });
   });
 });
