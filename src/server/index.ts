@@ -19,7 +19,6 @@ const initializeServer = (port: number) =>
       debug(chalk.green(`Connected to port ${port}`));
       resolve(server);
     });
-
     server.on("error", (error: { code: string }) => {
       debug(chalk.red("Error initializing Server"));
       if (error.code === "EADDRINUSE") {
