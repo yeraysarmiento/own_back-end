@@ -3,6 +3,7 @@ import { validate } from "express-validation";
 import {
   createPaper,
   deletePaper,
+  filterPapers,
   getPaginatedPapers,
   updatePaper,
 } from "../controllers/papersController";
@@ -15,7 +16,7 @@ import paperSchema from "../schemas/paperSchema";
 
 const router = express.Router();
 
-router.get("/:idBoard?", boardAuthentication, getPaginatedPapers);
+router.get("/:idBoard?", boardAuthentication, filterPapers, getPaginatedPapers);
 
 router.post(
   papersPath.createPaper,
