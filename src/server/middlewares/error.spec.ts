@@ -1,3 +1,4 @@
+import { ValidationError } from "@hapi/joi";
 import { Response } from "express";
 import { generalErrorHandler, notFoundErrorHandler } from "./error";
 
@@ -69,6 +70,16 @@ describe("Given a generalErrorHandler", () => {
       await generalErrorHandler(error, null, res, null);
 
       expect(res.json).toHaveBeenCalledWith({ error: "Little error" });
+    });
+  });
+  describe("When it is invoked by a ValidationError", () => {
+    test("Then it should add a message 'Not valid request'", async () => {
+      const error = new Error("Not valid request") as ValidationError;
+      const res = mockResponse();
+
+      await generalErrorHandler(error, null, res, null);
+
+      expect(res.json).toHaveBeenCalledWith({ error: error.message });
     });
   });
 });
