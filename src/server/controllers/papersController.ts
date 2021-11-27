@@ -6,7 +6,6 @@ import RequestAuth from "../utils/RequestAuth";
 import Paper from "../../database/models/paper";
 import { Board } from "../../database/models/board";
 import { OwnError } from "./usersController";
-import papersPath from "../paths/papersPath";
 
 const debug = log("own:paperscontroller");
 
