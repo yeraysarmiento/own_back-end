@@ -4,6 +4,7 @@ const paperSchema = {
   body: Joi.object({
     title: Joi.string().max(25).required(),
     subtitle: Joi.string().max(25).required(),
+    author: Joi.string().max(25),
     year: Joi.number().required(),
     published: Joi.boolean(),
     type: Joi.string().max(25).required(),
