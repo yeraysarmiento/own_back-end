@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import initializeDB from "./database";
-import initializeServer from "./server/index";
+import { initializeServer } from "./server/index";
 
 const port = process.env.PORT ?? process.env.OWN_PORT ?? 4500;
 

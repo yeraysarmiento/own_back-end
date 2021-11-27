@@ -28,7 +28,10 @@ const paperAuthentication = async (
       error.code = 403;
       next(error);
     }
-  } catch (error) {
+  } catch {
+    const error = new OwnError(
+      "There has been an issue with your authentication"
+    );
     error.code = 404;
     next(error);
   }
