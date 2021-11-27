@@ -92,31 +92,52 @@ const updatePaper = async (
   }
 };
 
-const getPaginatedPapers = async (
+const getPaginatedPapers = async (req: RequestAuth, res: Response) => {
+  const page = +req.query.page;
+  const limit = +req.query.limit;
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const papers = req.body;
+
+  const paperList = papers.slice(startIndex, endIndex);
+
+  if (paperList.length === 0) {
+    res.json([]);
+  } else {
+    res.status(200);
+    res.json(paperList);
+  }
+};
+
+const filterPapers = async (
   req: RequestAuth,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const filterBy: any = req.query.filterby;
+    const filterWith: any = req.query.filter;
     const { idBoard } = req.params;
-    const page = +req.query.page;
-    const limit = +req.query.limit;
-
     const board = await Board.findById(idBoard).populate("papers");
     const { papers } = board;
+    const papersList = papers.filter((paper) => paper[filterBy] === filterWith);
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+    req.body = papersList;
 
-    const paperList = papers.slice(startIndex, endIndex);
-
-    res.status(200);
-    res.json(paperList);
+    next();
   } catch {
-    const error = new OwnError("Pagination not possible");
+    const error = new OwnError("Filtration not possible");
     error.code = 400;
     next(error);
   }
 };
 
-export { createPaper, deletePaper, updatePaper, getPaginatedPapers };
+export {
+  createPaper,
+  deletePaper,
+  updatePaper,
+  getPaginatedPapers,
+  filterPapers,
+};
