@@ -16,8 +16,7 @@ const firebase = async (req, res, next) => {
     const getImages = req.files.map(async (image) => {
       await bucket.upload(image.path);
       await bucket.file(image.filename).makePublic();
-      const fileURL = bucket.file(image.filename).publicUrl();
-      return fileURL;
+      return bucket.file(image.filename).publicUrl();
     });
 
     const images = await Promise.all(getImages);
