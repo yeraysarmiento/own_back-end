@@ -18,7 +18,7 @@ router.get(boardsPath.getBoard, boardAuthentication, getBoard);
 
 router.post(
   boardsPath.createBoard,
-  uploadImages.array("logo"),
+  uploadImages.array("logo", 5),
   firebase,
   validate(boardSchema),
   createBoard
@@ -29,7 +29,7 @@ router.delete(boardsPath.deleteBoard, boardAuthentication, deleteBoard);
 router.patch(
   boardsPath.updateBoard,
   boardAuthentication,
-  uploadImages.array("logo"),
+  uploadImages.array("logo", 1),
   firebase,
   validate(boardSchema),
   updateBoard
