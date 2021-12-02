@@ -18,7 +18,7 @@ router.get(boardsPath.getBoard, boardAuthentication, getBoard);
 
 router.post(
   boardsPath.createBoard,
-  uploadImages.array("logo", 5),
+  uploadImages.array("logo", 1),
   firebase,
   validate(boardSchema),
   createBoard
