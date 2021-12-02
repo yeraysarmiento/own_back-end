@@ -129,7 +129,7 @@ const getBoardByName = async (
 
   try {
     const filledBoard = await Board.findOne({
-      name: { $regex: nameBoard, $options: "i" },
+      name: { $regex: new RegExp(`^${nameBoard.toLowerCase()}$`, "i") },
     }).populate("papers");
     if (filledBoard) {
       res.status(200);
