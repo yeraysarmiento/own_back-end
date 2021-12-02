@@ -120,4 +120,30 @@ const updateBoard = async (
   }
 };
 
-export { getBoard, createBoard, deleteBoard, updateBoard };
+const getBoardByName = async (
+  req: RequestAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  const { nameBoard } = req.params;
+
+  try {
+    const filledBoard = await Board.findOne({
+      name: { $regex: nameBoard, $options: "i" },
+    }).populate("papers");
+    if (filledBoard) {
+      res.status(200);
+      res.json(filledBoard);
+    } else {
+      const error = new OwnError("Board not found in our server");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.message = "Not possible to get the board";
+    error.code = 401;
+    next(error);
+  }
+};
+
+export { getBoard, createBoard, deleteBoard, updateBoard, getBoardByName };
