@@ -49,7 +49,7 @@ const createBoard = async (
       ...req.body,
       logo: req.images[0]
         ? req.images[0]
-        : "https://i.ibb.co/4Fyr9RL/no-pictures.png",
+        : "https://firebasestorage.googleapis.com/v0/b/own-api-2c648.appspot.com/o/assets%2Fnoimage.png?alt=media&token=98e7984a-6913-4c3e-ad48-74975dbd43c4",
     });
     await User.findOneAndUpdate(
       { _id: req.userId },
