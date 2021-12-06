@@ -119,8 +119,10 @@ const filterPapers = async (
   try {
     const filterBy: any = req.query.filterby;
     const filterWith: any = req.query.filter;
+
     const { idBoard } = req.params;
     const board = await Board.findById(idBoard).populate("papers");
+
     const { papers } = board;
     const papersList = papers.filter((paper) => paper[filterBy] === filterWith);
 

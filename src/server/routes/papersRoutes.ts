@@ -7,29 +7,31 @@ import {
   getPaginatedPapers,
   updatePaper,
 } from "../controllers/papersController";
-import boardAuthentication from "../middlewares/boardAuthentication";
 import firebase from "../middlewares/firebase";
 import paperAuthentication from "../middlewares/paperAuthentication";
 import uploadImages from "../middlewares/uploadImages";
 import papersPath from "../paths/papersPath";
 import paperSchema from "../schemas/paperSchema";
+import auth from "../middlewares/auth";
 
 const router = express.Router();
 
-router.get("/:idBoard?", boardAuthentication, filterPapers, getPaginatedPapers);
+router.get("/:idBoard?", filterPapers, getPaginatedPapers);
 
 router.post(
   papersPath.createPaper,
+  auth,
   uploadImages.array("images"),
   firebase,
   validate(paperSchema),
   createPaper
 );
 
-router.delete(papersPath.deletePaper, paperAuthentication, deletePaper);
+router.delete(papersPath.deletePaper, auth, paperAuthentication, deletePaper);
 
 router.patch(
   papersPath.updatePaper,
+  auth,
   uploadImages.array("images"),
   firebase,
   validate(paperSchema),

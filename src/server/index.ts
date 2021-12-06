@@ -39,7 +39,7 @@ app.use(express.json());
 
 app.use("/user", usersRoutes);
 app.use("/board", boardsRoutes);
-app.use("/paper", auth, papersRoutes);
+app.use("/paper", papersRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
