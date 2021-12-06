@@ -9,7 +9,7 @@ const paperSchema = {
     type: Joi.string().max(25).required(),
     location: Joi.string().max(25).required(),
     photograph: Joi.string().max(25),
-    text: Joi.string().min(50).max(2000).required(),
+    text: Joi.string().max(2000).required(),
     images: Joi.array(),
     deleted: Joi.boolean(),
   }),
