@@ -29,12 +29,11 @@ router.post(
 
 router.delete(papersPath.deletePaper, auth, paperAuthentication, deletePaper);
 
-router.patch(
+router.put(
   papersPath.updatePaper,
   auth,
   uploadImages.array("images"),
   firebase,
-  validate(paperSchema),
   updatePaper
 );
 
